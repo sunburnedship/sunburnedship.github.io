@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SO-WhaT Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --bg-page: #F4F6FB; --bg-elevated: #FFFFFF; --bg-subtle: #EEF1F7; --bg-hover: #E8ECF5;
+  --border: #E1E5EE; --border-strong: #C9CFDD;
+  --text-primary: #0B1430; --text-secondary: #4D5A78; --text-tertiary: #8190AD; --text-inverse: #FFFFFF;
+  --brand: #3358FF; --brand-hover: #1E3FE0; --brand-active: #1530B8;
+  --brand-soft: #E5EBFF; --brand-soft-hover: #D6DEFF;
+  --strength: #047857; --strength-bg: #D1FAE5; --strength-border: #6EE7B7;
+  --weakness: #B45309; --weakness-bg: #FEF3C7; --weakness-border: #FCD34D;
+  --opportunity: #0369A1; --opportunity-bg: #DBEAFE; --opportunity-border: #93C5FD;
+  --threat: #BE123C; --threat-bg: #FFE4E6; --threat-border: #FDA4AF;
+  --success: #047857; --success-bg: #D1FAE5;
+  --warning: #B45309; --warning-bg: #FEF3C7;
+  --danger: #BE123C; --danger-bg: #FFE4E6;
+  --shadow-sm: 0 1px 2px rgba(11,20,48,0.04), 0 1px 3px rgba(11,20,48,0.06);
+  --shadow-md: 0 2px 4px rgba(11,20,48,0.04), 0 4px 12px rgba(11,20,48,0.08);
+  --shadow-lg: 0 4px 8px rgba(11,20,48,0.06), 0 12px 32px rgba(11,20,48,0.12);
+  --shadow-xl: 0 8px 16px rgba(11,20,48,0.08), 0 24px 64px rgba(11,20,48,0.16);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px;
+  --avatar-1-bg: #DBEAFE; --avatar-1-fg: #1E40AF;
+  --avatar-2-bg: #FCE7F3; --avatar-2-fg: #9D174D;
+  --avatar-3-bg: #D1FAE5; --avatar-3-fg: #065F46;
+  --avatar-4-bg: #FEF3C7; --avatar-4-fg: #92400E;
+  --avatar-5-bg: #E0E7FF; --avatar-5-fg: #3730A3;
+  --avatar-6-bg: #FED7AA; --avatar-6-fg: #9A3412;
+  --avatar-7-bg: #CFFAFE; --avatar-7-fg: #155E75;
+  --avatar-8-bg: #FBCFE8; --avatar-8-fg: #831843;
+  --avatar-9-bg: #DDD6FE; --avatar-9-fg: #5B21B6;
+  --avatar-10-bg: #FECACA; --avatar-10-fg: #991B1B;
+}
+[data-theme="dark"] {
+  --bg-page: #0B0E1A; --bg-elevated: #151A2B; --bg-subtle: #1F2640; --bg-hover: #2A3252;
+  --border: #2A3252; --border-strong: #3A446B;
+  --text-primary: #F0F3FB; --text-secondary: #B6C0D8; --text-tertiary: #7282A2; --text-inverse: #0B1430;
+  --brand: #6F87FF; --brand-hover: #8AA0FF; --brand-active: #A6B7FF;
+  --brand-soft: #1E2548; --brand-soft-hover: #2A3260;
+  --strength: #34D399; --strength-bg: #064E3B; --strength-border: #047857;
+  --weakness: #FBBF24; --weakness-bg: #451A03; --weakness-border: #92400E;
+  --opportunity: #38BDF8; --opportunity-bg: #0C4A6E; --opportunity-border: #0369A1;
+  --threat: #FB7185; --threat-bg: #4C0519; --threat-border: #9F1239;
+  --success: #34D399; --success-bg: #064E3B;
+  --warning: #FBBF24; --warning-bg: #451A03;
+  --danger: #FB7185; --danger-bg: #4C0519;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 4px 8px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.6);
+  --avatar-1-bg: #1E3A8A; --avatar-1-fg: #BFDBFE;
+  --avatar-2-bg: #831843; --avatar-2-fg: #FBCFE8;
+  --avatar-3-bg: #064E3B; --avatar-3-fg: #6EE7B7;
+  --avatar-4-bg: #78350F; --avatar-4-fg: #FCD34D;
+  --avatar-5-bg: #312E81; --avatar-5-fg: #C7D2FE;
+  --avatar-6-bg: #7C2D12; --avatar-6-fg: #FED7AA;
+  --avatar-7-bg: #164E63; --avatar-7-fg: #A5F3FC;
+  --avatar-8-bg: #831843; --avatar-8-fg: #F9A8D4;
+  --avatar-9-bg: #4C1D95; --avatar-9-fg: #DDD6FE;
+  --avatar-10-bg: #7F1D1D; --avatar-10-fg: #FECACA;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-page); color: var(--text-primary); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; transition: background-color 0.2s ease, color 0.2s ease; }
+
+/* ====== APP HEADER ====== */
+.app-header { background: var(--bg-elevated); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 50; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; color: var(--text-primary); letter-spacing: -0.01em; cursor: pointer; }
+.logo-mark { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--brand) 0%, #6F87FF 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 13px; letter-spacing: -0.02em; box-shadow: var(--shadow-sm); }
+.session-pill { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-secondary); font-weight: 500; max-width: 320px; overflow: hidden; }
+.session-pill .title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.session-pill .code { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text-primary); letter-spacing: 0.05em; }
+.header-spacer { flex: 1; }
+.member-stack { display: flex; align-items: center; }
+.member-stack .avatar { margin-left: -8px; border: 2px solid var(--bg-elevated); }
+.member-stack .avatar:first-child { margin-left: 0; }
+.member-stack .more { margin-left: -8px; width: 32px; height: 32px; border-radius: 999px; background: var(--bg-subtle); border: 2px solid var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+
+/* ====== AVATARS ====== */
+.avatar { width: 32px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; flex-shrink: 0; }
+.avatar.sm { width: 24px; height: 24px; font-size: 10px; }
+.avatar.lg { width: 40px; height: 40px; font-size: 14px; }
+.avatar.xl { width: 48px; height: 48px; font-size: 16px; }
+
+/* ====== BUTTONS ====== */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--brand); color: white; box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--brand-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--bg-subtle); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-danger:hover:not(:disabled) { filter: brightness(1.1); }
+.btn-lg { padding: 12px 22px; font-size: 14px; }
+.btn-icon { padding: 8px; }
+
+/* ====== PHASE STEPPER ====== */
+.phase-stepper { background: var(--bg-elevated); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; gap: 8px; overflow-x: auto; }
+.stepper-item { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.stepper-item.flex { flex: 1; min-width: 0; }
+.stepper-circle { width: 28px; height: 28px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; transition: all 0.2s ease; }
+.stepper-item.done .stepper-circle { background: var(--success); color: white; }
+.stepper-item.active .stepper-circle { background: var(--brand); color: white; box-shadow: 0 0 0 4px var(--brand-soft); }
+.stepper-item.todo .stepper-circle { background: var(--bg-subtle); color: var(--text-tertiary); border: 1px solid var(--border-strong); }
+.stepper-label { display: flex; flex-direction: column; font-size: 12px; }
+.stepper-label .top { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); }
+.stepper-item.active .stepper-label .top { color: var(--brand); }
+.stepper-item.done .stepper-label .top { color: var(--success); }
+.stepper-label .bottom { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+.stepper-item.todo .stepper-label .bottom { color: var(--text-tertiary); }
+.stepper-line { flex: 1; height: 2px; background: var(--border); border-radius: 1px; min-width: 16px; }
+.stepper-line.done { background: var(--success); }
+.stepper-progress { display: inline-flex; align-items: center; gap: 5px; margin-left: 10px; padding: 3px 9px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; position: relative; }
+.stepper-progress svg { width: 11px; height: 11px; }
+.stepper-progress::after { content: ''; position: absolute; top: 50%; left: -3px; width: 8px; height: 8px; border-radius: 999px; background: var(--brand); transform: translateY(-50%); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(51,88,255,0.5); } 50% { box-shadow: 0 0 0 6px rgba(51,88,255,0); } }
+.stepper-progress.complete { background: var(--success-bg); color: var(--success); }
+.stepper-progress.complete::after { background: var(--success); animation: none; }
+
+/* ====== CONTENT LAYOUT ====== */
+.content { max-width: 1200px; margin: 0 auto; padding: 28px 32px 80px; }
+.content.narrow { max-width: 720px; }
+.content.wide { max-width: 1400px; }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+.page-title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin: 0 0 6px 0; }
+.page-subtitle { font-size: 14px; color: var(--text-secondary); margin: 0; }
+
+/* ====== CARDS ====== */
+.card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); }
+.card.flush { padding: 0; }
+.card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.card-body { padding: 24px; }
+.card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.01em; }
+.card-subtitle { font-size: 13px; color: var(--text-secondary); margin: 2px 0 0 0; }
+
+/* ====== HERO + SETUP ====== */
+.hero { text-align: center; padding: 40px 16px 16px; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--brand-soft); color: var(--brand); border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+.hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; color: var(--text-primary); margin: 0 0 12px 0; line-height: 1.1; }
+.hero h1 .accent { background: linear-gradient(135deg, var(--brand) 0%, #8AA0FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 16px; color: var(--text-secondary); max-width: 540px; margin: 0 auto; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; }
+@media (max-width: 720px) { .setup-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 32px; } }
+.setup-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; position: relative; overflow: hidden; transition: all 0.2s ease; box-shadow: var(--shadow-sm); }
+.setup-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.setup-card.featured { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%); color: white; border-color: transparent; }
+.setup-card.featured h3, .setup-card.featured .desc { color: white; }
+.setup-card.featured .field label { color: rgba(255,255,255,0.85); }
+.setup-card.featured .input { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); color: white; }
+.setup-card.featured .input::placeholder { color: rgba(255,255,255,0.6); }
+.setup-card.featured .btn-primary { background: white; color: var(--brand); }
+.setup-card.featured .btn-primary:hover { background: rgba(255,255,255,0.92); }
+.setup-icon { width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.setup-icon svg { width: 22px; height: 22px; }
+.setup-card.featured .setup-icon { background: rgba(255,255,255,0.16); color: white; }
+.setup-card h3 { font-size: 18px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: -0.01em; }
+.setup-card .desc { font-size: 13px; opacity: 0.85; margin-bottom: 20px; }
+
+/* ====== FORMS ====== */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+.field .hint { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+.input, .select, .textarea { width: 100%; padding: 10px 12px; font-family: inherit; font-size: 14px; background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+.input.code-input { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 600; letter-spacing: 0.2em; text-align: center; text-transform: uppercase; }
+.radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.radio-card { position: relative; padding: 14px; background: var(--bg-elevated); border: 1.5px solid var(--border-strong); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s ease; }
+.setup-card.featured .radio-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: white; }
+.radio-card.checked { border-color: var(--brand); background: var(--brand-soft); }
+.setup-card.featured .radio-card.checked { background: rgba(255,255,255,0.18); border-color: white; }
+.radio-card .label { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.radio-card .hint { font-size: 11px; opacity: 0.7; }
+
+/* ====== SHARE BANNER ====== */
+.share-banner { background: linear-gradient(135deg, var(--brand-soft) 0%, var(--bg-elevated) 100%); border: 1px solid var(--brand-soft); border-radius: var(--radius-lg); padding: 24px 28px; display: flex; align-items: center; gap: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; flex-wrap: wrap; }
+.share-banner::before { content: ''; position: absolute; top: -50%; right: -10%; width: 240px; height: 240px; background: radial-gradient(circle, var(--brand-soft-hover) 0%, transparent 70%); opacity: 0.5; pointer-events: none; }
+.share-banner .info { flex: 1; min-width: 200px; position: relative; }
+.share-banner h3 { font-size: 14px; font-weight: 700; margin: 0 0 4px 0; color: var(--text-primary); }
+.share-banner p { font-size: 13px; color: var(--text-secondary); margin: 0; }
+.share-code { display: flex; align-items: center; gap: 8px; position: relative; flex-wrap: wrap; }
+.share-code .code-display { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; letter-spacing: 0.15em; background: var(--bg-elevated); border: 1px solid var(--border-strong); padding: 12px 20px; border-radius: var(--radius-md); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+
+/* ====== MEMBER LIST ====== */
+.member-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.member-row { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); transition: all 0.15s ease; }
+.member-row:hover { background: var(--bg-subtle); }
+.member-row .info { flex: 1; min-width: 0; }
+.member-row .name { font-size: 14px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.member-row .meta { font-size: 12px; color: var(--text-tertiary); }
+.role-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; background: var(--brand-soft); color: var(--brand); border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 6px; }
+.status-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+.status-dot.active { background: var(--success); box-shadow: 0 0 0 3px var(--success-bg); }
+.status-dot.idle { background: var(--warning); box-shadow: 0 0 0 3px var(--warning-bg); }
+.status-dot.done { background: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+
+/* ====== BADGES ====== */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.badge.success { background: var(--success-bg); color: var(--success); }
+.badge.warning { background: var(--warning-bg); color: var(--warning); }
+.badge.danger { background: var(--danger-bg); color: var(--danger); }
+.badge.brand { background: var(--brand-soft); color: var(--brand); }
+.badge.neutral { background: var(--bg-subtle); color: var(--text-secondary); }
+
+/* ====== SWOT CARDS (identify + consolidate) ====== */
+.identify-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .identify-grid { grid-template-columns: 1fr; } }
+.swot-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s ease; }
+.swot-card:hover { box-shadow: var(--shadow-md); }
+.swot-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.swot-header .title-group { display: flex; align-items: center; gap: 10px; }
+.swot-header .icon-circle { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.swot-header .title-group .name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.swot-header .title-group .desc { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+.swot-header .count { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-tertiary); background: var(--bg-subtle); padding: 4px 10px; border-radius: 999px; }
+.swot-card.s .icon-circle { background: var(--strength-bg); color: var(--strength); }
+.swot-card.w .icon-circle { background: var(--weakness-bg); color: var(--weakness); }
+.swot-card.o .icon-circle { background: var(--opportunity-bg); color: var(--opportunity); }
+.swot-card.t .icon-circle { background: var(--threat-bg); color: var(--threat); }
+.swot-card.s .swot-header { background: linear-gradient(180deg, var(--strength-bg) 0%, transparent 100%); }
+.swot-card.w .swot-header { background: linear-gradient(180deg, var(--weakness-bg) 0%, transparent 100%); }
+.swot-card.o .swot-header { background: linear-gradient(180deg, var(--opportunity-bg) 0%, transparent 100%); }
+.swot-card.t .swot-header { background: linear-gradient(180deg, var(--threat-bg) 0%, transparent 100%); }
+.swot-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.swot-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.swot-item:hover { background: var(--bg-hover); }
+.swot-item .text { flex: 1; font-size: 13px; color: var(--text-primary); word-break: break-word; }
+.swot-item .author-pill { font-size: 10px; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px; }
+.swot-item .actions { display: flex; gap: 4px; opacity: 0.5; transition: opacity 0.15s ease; flex-shrink: 0; }
+.swot-item:hover .actions { opacity: 1; }
+.icon-btn { width: 24px; height: 24px; border: none; background: transparent; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-tertiary); transition: all 0.15s ease; }
+.icon-btn svg { width: 14px; height: 14px; }
+.icon-btn:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.icon-btn.danger:hover { background: var(--danger-bg); color: var(--danger); }
+.add-item-row { display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 12px; background: var(--bg-elevated); border: 1.5px dashed var(--border-strong); border-radius: var(--radius-sm); margin-top: 4px; transition: all 0.15s ease; }
+.add-item-row:focus-within { border-color: var(--brand); background: var(--brand-soft); border-style: solid; }
+.add-item-row input { flex: 1; border: none; background: transparent; font-family: inherit; font-size: 13px; color: var(--text-primary); outline: none; }
+.add-item-row input::placeholder { color: var(--text-tertiary); }
+.add-item-row .btn { padding: 6px 12px; font-size: 12px; }
+
+/* ====== ACTIVITY SIDEBAR ====== */
+.identify-layout { display: grid; grid-template-columns: 1fr 280px; gap: 20px; }
+@media (max-width: 1100px) { .identify-layout { grid-template-columns: 1fr; } }
+.activity-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); position: sticky; top: 152px; align-self: start; }
+.activity-header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.activity-header h4 { font-size: 13px; font-weight: 700; margin: 0; }
+.activity-header p { font-size: 12px; color: var(--text-tertiary); margin: 2px 0 0 0; }
+.activity-list { padding: 8px; max-height: 400px; overflow-y: auto; }
+.activity-row { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); transition: background 0.15s ease; }
+.activity-row:hover { background: var(--bg-subtle); }
+.activity-row .info { flex: 1; min-width: 0; }
+.activity-row .name { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.activity-row .status { font-size: 11px; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px; }
+
+/* ====== OPTION TABS (comparative mode) ====== */
+.option-tabs { display: flex; gap: 6px; padding: 6px; background: var(--bg-subtle); border-radius: var(--radius-md); margin-bottom: 16px; overflow-x: auto; }
+.option-tab { padding: 8px 14px; border: none; background: transparent; border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
+.option-tab:hover { background: var(--bg-hover); color: var(--text-primary); }
+.option-tab.active { background: var(--bg-elevated); color: var(--brand); box-shadow: var(--shadow-sm); }
+
+/* ====== SCORE PHASE ====== */
+.score-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.score-toolbar .left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.progress-text { font-size: 13px; color: var(--text-secondary); }
+.progress-text strong { color: var(--text-primary); font-weight: 700; }
+.progress-bar { width: 160px; height: 6px; background: var(--bg-subtle); border-radius: 999px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--brand) 0%, #8AA0FF 100%); border-radius: 999px; transition: width 0.3s ease; }
+.score-section { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 16px; overflow: hidden; }
+.score-section-header { padding: 14px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+.score-section.s .score-section-header { background: linear-gradient(90deg, var(--strength-bg), transparent); }
+.score-section.w .score-section-header { background: linear-gradient(90deg, var(--weakness-bg), transparent); }
+.score-section.o .score-section-header { background: linear-gradient(90deg, var(--opportunity-bg), transparent); }
+.score-section.t .score-section-header { background: linear-gradient(90deg, var(--threat-bg), transparent); }
+.score-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border); transition: background 0.15s ease; flex-wrap: wrap; }
+.score-row:last-child { border-bottom: none; }
+.score-row:hover { background: var(--bg-subtle); }
+.score-row .text { flex: 1; min-width: 200px; font-size: 14px; color: var(--text-primary); }
+.score-segments { display: flex; gap: 4px; background: var(--bg-subtle); padding: 3px; border-radius: var(--radius-sm); flex-shrink: 0; }
+.score-seg { width: 36px; height: 32px; border: none; background: transparent; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease; }
+.score-seg:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.score-seg.selected { background: var(--brand); color: white; box-shadow: var(--shadow-sm); }
+.score-seg.selected.s { background: var(--strength); }
+.score-seg.selected.w { background: var(--weakness); }
+.score-seg.selected.o { background: var(--opportunity); }
+.score-seg.selected.t { background: var(--threat); }
+.likert-legend { display: flex; gap: 12px; font-size: 11px; color: var(--text-tertiary); flex-wrap: wrap; }
+.likert-legend span { display: flex; align-items: center; gap: 4px; }
+.likert-legend strong { color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+.submit-bar { position: sticky; bottom: 0; background: var(--bg-elevated); border-top: 1px solid var(--border); padding: 16px 24px; margin: 24px -32px -80px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -4px 16px rgba(11,20,48,0.06); z-index: 10; flex-wrap: wrap; gap: 12px; }
+[data-theme="dark"] .submit-bar { box-shadow: 0 -4px 16px rgba(0,0,0,0.4); }
+
+/* ====== RESULTS - RECOMMENDATION CARD ====== */
+.rec-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; box-shadow: var(--shadow-md); }
+.rec-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--text-tertiary); }
+.rec-card.yes-strong::before { background: linear-gradient(90deg, var(--success), #34D399); }
+.rec-card.yes-lean::before { background: linear-gradient(90deg, #34D399, #6EE7B7); }
+.rec-card.inconclusive::before { background: linear-gradient(90deg, var(--text-tertiary), var(--border-strong)); }
+.rec-card.no-lean::before { background: linear-gradient(90deg, #FB7185, var(--danger)); }
+.rec-card.no-strong::before { background: linear-gradient(90deg, var(--danger), #BE123C); }
+.rec-top { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; margin-bottom: 24px; }
+.rec-icon { width: 72px; height: 72px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rec-icon.yes { background: var(--success-bg); color: var(--success); }
+.rec-icon.no { background: var(--danger-bg); color: var(--danger); }
+.rec-icon.maybe { background: var(--bg-subtle); color: var(--text-tertiary); }
+.rec-icon svg { width: 40px; height: 40px; }
+.rec-content .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 4px; }
+.rec-content h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 6px 0; color: var(--text-primary); }
+.rec-content p { font-size: 14px; color: var(--text-secondary); margin: 0; max-width: 620px; line-height: 1.55; }
+.rec-scale { margin-top: 4px; }
+.rec-track { position: relative; height: 14px; display: flex; border-radius: 999px; overflow: hidden; background: var(--bg-subtle); }
+.rec-zone { flex: 1; height: 100%; }
+.rec-zone.no-strong { background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, transparent)); }
+.rec-zone.no-lean { background: color-mix(in srgb, var(--danger) 30%, var(--bg-subtle)); flex: 0.7; }
+.rec-zone.neutral { background: var(--bg-subtle); flex: 0.6; }
+.rec-zone.yes-lean { background: color-mix(in srgb, var(--success) 30%, var(--bg-subtle)); flex: 0.7; }
+.rec-zone.yes-strong { background: linear-gradient(90deg, color-mix(in srgb, var(--success) 60%, transparent), var(--success)); }
+.rec-marker { position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 999px; background: var(--bg-elevated); border: 3px solid var(--text-primary); transform: translate(-50%, -50%); box-shadow: var(--shadow-md); z-index: 2; }
+.rec-card.yes-strong .rec-marker { border-color: var(--success); }
+.rec-card.yes-lean .rec-marker { border-color: #34D399; }
+.rec-card.no-strong .rec-marker { border-color: var(--danger); }
+.rec-card.no-lean .rec-marker { border-color: #FB7185; }
+.rec-axis { display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+.rec-formula { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--border); font-size: 13px; flex-wrap: wrap; gap: 8px; }
+.rec-formula .score-display { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; color: var(--text-primary); }
+.rec-formula .score-display .pos { color: var(--success); }
+.rec-formula .score-display .neg { color: var(--danger); }
+.rec-formula .breakdown { color: var(--text-tertiary); font-size: 12px; }
+.rec-formula .breakdown code { font-family: 'JetBrains Mono', monospace; background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--text-secondary); font-weight: 600; }
+
+/* ====== INPUT CARDS (consensus + sowt) ====== */
+.input-cards { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 900px) { .input-cards { grid-template-columns: 1fr; } }
+.input-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; position: relative; display: flex; flex-direction: column; }
+.input-card .weight-tag { display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.input-card.primary .weight-tag { background: var(--brand-soft); color: var(--brand); }
+.input-card.secondary .weight-tag { background: var(--bg-subtle); color: var(--text-secondary); }
+.input-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 12px 0; color: var(--text-primary); letter-spacing: -0.01em; }
+.input-card .desc { font-size: 13px; color: var(--text-secondary); margin: 0 0 12px 0; line-height: 1.5; }
+.vector-summary { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg-subtle); border-radius: var(--radius-md); margin-bottom: 12px; }
+.vector-summary .qbadge { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.vector-summary .qbadge.yes { background: var(--success-bg); color: var(--success); }
+.vector-summary .qbadge.no { background: var(--danger-bg); color: var(--danger); }
+.vector-summary .qbadge.maybe { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-strong); }
+.vector-summary .vinfo .quadrant-name { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.vector-summary .vinfo .vmag { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.vector-summary .vinfo .vmag strong { color: var(--text-primary); font-weight: 700; }
+.contribution-row { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; margin-top: auto; border-top: 1px dashed var(--border); font-size: 12px; }
+.contribution-row .label-text { color: var(--text-tertiary); font-weight: 600; }
+.contribution-row .value-text { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: var(--text-primary); }
+.contribution-row .value-text.pos { color: var(--success); }
+.contribution-row .value-text.neg { color: var(--danger); }
+.index-display-large { display: flex; align-items: baseline; gap: 8px; padding: 14px; background: var(--bg-subtle); border-radius: var(--radius-md); margin-bottom: 12px; }
+.index-display-large .num { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.index-display-large .num.pos { color: var(--success); }
+.index-display-large .num.neg { color: var(--danger); }
+.index-display-large .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); align-self: center; }
+
+/* ====== METRICS ====== */
+.metric-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 720px) { .metric-cards { grid-template-columns: repeat(2, 1fr); } }
+.metric-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; position: relative; overflow: hidden; }
+.metric-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.metric-card.s::before { background: var(--strength); }
+.metric-card.w::before { background: var(--weakness); }
+.metric-card.o::before { background: var(--opportunity); }
+.metric-card.t::before { background: var(--threat); }
+.metric-card .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.metric-card .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); }
+.metric-card .value { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+.metric-card .value-bar { height: 4px; background: var(--bg-subtle); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+.metric-card .value-bar .fill { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+.metric-card.s .value-bar .fill { background: var(--strength); }
+.metric-card.w .value-bar .fill { background: var(--weakness); }
+.metric-card.o .value-bar .fill { background: var(--opportunity); }
+.metric-card.t .value-bar .fill { background: var(--threat); }
+
+/* ====== PLOT ====== */
+.plot-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; }
+.plot-svg-wrap { position: relative; display: flex; justify-content: center; margin: 20px auto; }
+
+/* ====== COMPARATIVE RESULTS ====== */
+.compare-results { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table th, .compare-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+.compare-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); background: var(--bg-subtle); }
+.compare-table td.num { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.compare-table td.rec { font-weight: 700; }
+.compare-table tr.winner { background: var(--success-bg); }
+.compare-table tr.winner td { color: var(--text-primary); }
+.compare-table .rank-cell { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--brand); }
+
+/* ====== UTILITY ====== */
+.divider { height: 1px; background: var(--border); margin: 16px 0; border: 0; }
+.btn-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.btn-row.between { justify-content: space-between; }
+.btn-row.end { justify-content: flex-end; }
+.empty-state { padding: 32px 20px; text-align: center; color: var(--text-tertiary); font-size: 13px; }
+.kbd { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: var(--bg-subtle); border: 1px solid var(--border); color: var(--text-secondary); }
+
+/* ====== TOAST ====== */
+.toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 16px; box-shadow: var(--shadow-lg); font-size: 13px; color: var(--text-primary); display: flex; align-items: center; gap: 10px; min-width: 240px; max-width: 360px; animation: slide-in 0.2s ease-out; pointer-events: auto; }
+.toast.success { border-left: 4px solid var(--success); }
+.toast.error { border-left: 4px solid var(--danger); }
+.toast.info { border-left: 4px solid var(--brand); }
+@keyframes slide-in { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ====== MODAL ====== */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(11,20,48,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+[data-theme="dark"] .modal-backdrop { background: rgba(0,0,0,0.7); }
+.modal { background: var(--bg-elevated); border-radius: var(--radius-lg); padding: 24px; max-width: 480px; width: 100%; box-shadow: var(--shadow-xl); }
+.modal h3 { font-size: 18px; font-weight: 700; margin: 0 0 8px 0; }
+.modal p { font-size: 14px; color: var(--text-secondary); margin: 0 0 16px 0; }
+
+/* ====== LOADING ====== */
+.loading-screen { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 12px; color: var(--text-secondary); }
+.spinner { width: 32px; height: 32px; border: 3px solid var(--bg-subtle); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* options config (comparative setup) */
+.options-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.option-row { display: flex; align-items: center; gap: 8px; }
+.option-row .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-tertiary); width: 24px; flex-shrink: 0; }
+.option-row .input { flex: 1; }
+
+</style>
+</head>
+<body>
+
+<!-- ICON SPRITE -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="i-thumbs-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9A2 2 0 0 0 19.66 9H14zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></symbol>
+    <symbol id="i-thumbs-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></symbol>
+    <symbol id="i-help-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+  </defs>
+</svg>
+
+<!-- Mount point -->
+<div id="app"></div>
+<div id="toasts" class="toast-container"></div>
+<div id="modal-mount"></div>
+
+<script>
+// ============================================================================
+// APP CODE - injected below
+// ============================================================================
+// PRE-CONFIGURED CREDENTIALS (optional — paste once, distribute the file)
+// ============================================================================
+// Fill these in to skip the config screen for everyone who opens this file.
+//
+// Both values are SAFE to embed in browser code:
+//   - The "Project URL" is a public HTTPS endpoint
+//   - The "Publishable key" (or legacy "anon" key) is *designed* to be public.
+//     Your data is protected by your Row Level Security policies, not by
+//     keeping this string secret. Supabase docs confirm this explicitly.
+//
+// Leave both as empty strings ('') to keep the in-app config screen instead.
+// ============================================================================
+const PRECONFIGURED = {
+  url: '',       // e.g. 'https://abcdefg.supabase.co'
+  anonKey: '',   // e.g. 'sb_publishable_AbCdEf123...' or legacy 'eyJhbGc...'
+};
+
+function isPreconfigured() {
+  return !!(PRECONFIGURED.url && PRECONFIGURED.anonKey);
+}
+
+// ============================================================================
+// CONSTANTS AND HELPERS
+// ============================================================================
+const CATEGORIES = ['S', 'W', 'O', 'T'];
+const CATEGORY_NAMES = { S: 'Strengths', W: 'Weaknesses', O: 'Opportunities', T: 'Threats' };
+const CATEGORY_DESC = { S: 'Internal · helpful', W: 'Internal · harmful', O: 'External · helpful', T: 'External · harmful' };
+const PHASES = ['lobby', 'identify', 'consolidate', 'score', 'results'];
+const PHASE_LABELS = { lobby: 'Lobby', identify: 'Identify', consolidate: 'Consolidate', score: 'Score', results: 'Results' };
+const PHASE_NUMS = { lobby: 0, identify: 1, consolidate: 2, score: 3, results: 4 };
+
+const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function genCode(len = 6) {
+  let code = '';
+  for (let i = 0; i < len; i++) code += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+  return code;
+}
+function genId() {
+  return 'u_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+function initials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+function avatarStyle(idx) {
+  const n = (idx % 10) + 1;
+  return `background:var(--avatar-${n}-bg);color:var(--avatar-${n}-fg)`;
+}
+function debounce(fn, ms) {
+  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+function toast(msg, type = 'info', ms = 3000) {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(20px)'; setTimeout(() => t.remove(), 200); }, ms);
+}
+
+// URL hash → join code (for invite links like .../sowhat_app.html#join=ABC123)
+function getJoinCodeFromUrl() {
+  if (typeof window === 'undefined' || !window.location) return null;
+  const hash = window.location.hash || '';
+  const m = hash.match(/^#join=([A-Za-z0-9]{6})/);
+  return m ? m[1].toUpperCase() : null;
+}
+
+// Build a shareable invite link from a session code
+function buildInviteLink(code) {
+  if (typeof window === 'undefined') return code;
+  const base = window.location.href.split('#')[0];
+  return `${base}#join=${code}`;
+}
+
+// ============================================================================
+// STATE
+// ============================================================================
+const state = {
+  // Identity
+  user: null,           // {id, name}
+  // Supabase
+  supabase: null,
+  config: null,         // {url, anonKey}
+  // Session
+  session: null,        // session row
+  members: [],
+  items: [],
+  scores: [],           // each: {item_id, user_id, score}
+  // UI
+  view: 'loading',      // loading | config | setup | lobby | identify | consolidate | score | results
+  activeOptionId: 'main',  // for comparative mode
+  pendingJoinCode: null,   // set if user arrived via invite link
+  // realtime channel
+  channel: null,
+};
+
+// localStorage keys
+const LS = {
+  CONFIG: 'sowhat_v2:config',
+  USER: 'sowhat_v2:user',
+  THEME: 'sowhat_v2:theme',
+  CURRENT: 'sowhat_v2:current_session',  // {code, role}
+};
+
+// ============================================================================
+// SUPABASE INITIALIZATION
+// ============================================================================
+async function initSupabase() {
+  if (!state.config) return false;
+  try {
+    state.supabase = window.supabase.createClient(state.config.url, state.config.anonKey, {
+      realtime: { params: { eventsPerSecond: 5 } }
+    });
+    // sanity check
+    const { error } = await state.supabase.from('sessions').select('id').limit(1);
+    if (error) {
+      console.error('Supabase test query failed:', error);
+      toast('Supabase connection failed: ' + error.message, 'error', 6000);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error('Supabase init error:', e);
+    toast('Could not connect to Supabase', 'error', 6000);
+    return false;
+  }
+}
+
+// ============================================================================
+// PERSISTENCE
+// ============================================================================
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem(LS.CONFIG) || 'null'); } catch { return null; }
+}
+function saveConfig(cfg) {
+  localStorage.setItem(LS.CONFIG, JSON.stringify(cfg));
+}
+function clearConfig() { localStorage.removeItem(LS.CONFIG); }
+
+function loadUser() {
+  try { return JSON.parse(localStorage.getItem(LS.USER) || 'null'); } catch { return null; }
+}
+function saveUser(u) { localStorage.setItem(LS.USER, JSON.stringify(u)); }
+
+function loadTheme() { return localStorage.getItem(LS.THEME) || 'light'; }
+function saveTheme(t) { localStorage.setItem(LS.THEME, t); }
+
+function setCurrent(code, role) {
+  if (!code) localStorage.removeItem(LS.CURRENT);
+  else localStorage.setItem(LS.CURRENT, JSON.stringify({ code, role }));
+}
+function getCurrent() {
+  try { return JSON.parse(localStorage.getItem(LS.CURRENT) || 'null'); } catch { return null; }
+}
+
+// ============================================================================
+// CALCULATIONS - SOWhaT methodology + recommendation
+// ============================================================================
+function calculateForOption(optionId) {
+  const optionItems = state.items.filter(i => i.option_id === optionId);
+  const sums = { S: 0, W: 0, O: 0, T: 0 };
+  const counts = { S: 0, W: 0, O: 0, T: 0 };
+  const itemDetails = [];
+
+  for (const item of optionItems) {
+    const itemScores = state.scores.filter(s => s.item_id === item.id);
+    if (itemScores.length === 0) continue;
+    const avg = itemScores.reduce((a, s) => a + s.score, 0) / itemScores.length;
+    sums[item.category] += avg;
+    counts[item.category] += 1;
+    itemDetails.push({ ...item, avg, n: itemScores.length });
+  }
+
+  // Category averages (mean of item averages)
+  const S = counts.S > 0 ? sums.S / counts.S : 0;
+  const W = counts.W > 0 ? sums.W / counts.W : 0;
+  const O = counts.O > 0 ? sums.O / counts.O : 0;
+  const T = counts.T > 0 ? sums.T / counts.T : 0;
+
+  // 1D SOWT index (paper formula): ((S+O) - (W+T)) / 6, range [-1, +1]
+  const sowt = ((S + O) - (W + T)) / 6;
+
+  // 2D consensus vector
+  // Paper: X = O - T (horizontal), Y = S - W (vertical)
+  // Each ranges -3..+3
+  const Xraw = O - T;
+  const Yraw = S - W;
+  const X = Xraw / 3;  // normalize to [-1, +1]
+  const Y = Yraw / 3;
+  // NCV = sqrt(X^2 + Y^2) * 3 / sqrt(18)  -- but easier: use raw, divide by sqrt(18)
+  const NCV = Math.sqrt(Xraw * Xraw + Yraw * Yraw) / Math.sqrt(18);
+
+  // Quadrant determination
+  // Q1: X>=0, Y>=0 → strong yes direction
+  // Q3: X<=0, Y<=0 → strong no direction
+  // Q2: X<0, Y>=0 → mixed (S helps but O missing); subdivide by sowt sign
+  // Q4: X>=0, Y<0 → mixed (O helps but W high); subdivide by sowt sign
+  let quadrant, subQuadrant, directionalFactor;
+  if (X >= 0 && Y >= 0) { quadrant = 'I'; subQuadrant = 'I'; directionalFactor = 1.0; }
+  else if (X < 0 && Y < 0) { quadrant = 'III'; subQuadrant = 'III'; directionalFactor = -1.0; }
+  else if (X < 0 && Y >= 0) {
+    quadrant = 'II';
+    if (sowt >= 0) { subQuadrant = 'IIa'; directionalFactor = 0.4; }
+    else { subQuadrant = 'IIb'; directionalFactor = -0.4; }
+  } else {
+    quadrant = 'IV';
+    if (sowt >= 0) { subQuadrant = 'IVa'; directionalFactor = 0.4; }
+    else { subQuadrant = 'IVb'; directionalFactor = -0.4; }
+  }
+
+  // Recommendation: 75% vector, 25% sowt
+  const vectorScore = NCV * directionalFactor;
+  const recommendation = 0.75 * vectorScore + 0.25 * sowt;
+
+  // Verdict bands
+  let verdict;
+  if (recommendation >= 0.5) verdict = 'yes-strong';
+  else if (recommendation >= 0.15) verdict = 'yes-lean';
+  else if (recommendation > -0.15) verdict = 'inconclusive';
+  else if (recommendation > -0.5) verdict = 'no-lean';
+  else verdict = 'no-strong';
+
+  return {
+    optionId, S, W, O, T, sowt, X, Y, NCV, Xraw, Yraw,
+    quadrant, subQuadrant, directionalFactor, vectorScore,
+    recommendation, verdict,
+    itemDetails, totalItems: optionItems.length,
+  };
+}
+
+const VERDICT_INFO = {
+  'yes-strong': { label: 'Strong Yes', headline: 'Strong Yes — proceed', icon: 'i-thumbs-up', iconClass: 'yes', desc: 'The consensus vector lands cleanly in Quadrant I with high magnitude, and the SOWT index agrees on direction. The team is well-aligned.' },
+  'yes-lean': { label: 'Lean Yes', headline: 'Lean Yes — proceed cautiously', icon: 'i-thumbs-up', iconClass: 'yes', desc: 'The recommendation tilts positive, but consensus or quadrant placement is mixed. Worth a closer look at where the disagreements lie before committing.' },
+  'inconclusive': { label: 'Inconclusive', headline: 'Inconclusive — gather more input', icon: 'i-help-circle', iconClass: 'maybe', desc: 'The team is genuinely split, or the consensus vector is too short to call this confidently either way. Consider revisiting items the team weighted lowest in agreement.' },
+  'no-lean': { label: 'Lean No', headline: 'Lean No — likely defer', icon: 'i-thumbs-down', iconClass: 'no', desc: 'The recommendation tilts negative, but consensus or quadrant placement is mixed. Worth examining what would need to change to flip the decision.' },
+  'no-strong': { label: 'Strong No', headline: 'Strong No — do not proceed', icon: 'i-thumbs-down', iconClass: 'no', desc: 'The consensus vector lands clearly in Quadrant III with high magnitude, and the SOWT index agrees on direction. The team is well-aligned against this option.' },
+};
+
+// ============================================================================
+// SUPABASE OPERATIONS
+// ============================================================================
+async function createSession({ title, question, mode, options, leadName }) {
+  const code = genCode();
+  const optionsArr = mode === 'comparative' ? options.map(name => ({ id: genId(), name })) : [{ id: 'main', name: 'Main' }];
+  const { data, error } = await state.supabase
+    .from('sessions')
+    .insert({
+      code, title, question: question || '',
+      mode, options: optionsArr,
+      lead_id: state.user.id, lead_name: leadName, phase: 'lobby',
+    })
+    .select()
+    .single();
+  if (error) throw error;
+  // Insert lead as member
+  await state.supabase.from('members').insert({
+    session_id: data.id, user_id: state.user.id, name: leadName,
+  });
+  return data;
+}
+
+async function joinSession(code, name) {
+  const { data: session, error } = await state.supabase
+    .from('sessions').select('*').eq('code', code.toUpperCase()).maybeSingle();
+  if (error) throw error;
+  if (!session) throw new Error('No session found with that code');
+
+  // Check member count
+  const { count } = await state.supabase.from('members')
+    .select('*', { count: 'exact', head: true }).eq('session_id', session.id);
+  if (count >= 10) throw new Error('Session is full (10 members maximum)');
+
+  // Upsert member (in case they're rejoining)
+  const { error: memErr } = await state.supabase.from('members').upsert({
+    session_id: session.id, user_id: state.user.id, name,
+    last_seen: new Date().toISOString(),
+  }, { onConflict: 'session_id,user_id' });
+  if (memErr) throw memErr;
+
+  return session;
+}
+
+async function loadSessionData(sessionId) {
+  const [{ data: session }, { data: members }, { data: items }, { data: scores }] = await Promise.all([
+    state.supabase.from('sessions').select('*').eq('id', sessionId).single(),
+    state.supabase.from('members').select('*').eq('session_id', sessionId),
+    state.supabase.from('items').select('*').eq('session_id', sessionId),
+    state.supabase.from('scores').select('*').eq('session_id', sessionId),
+  ]);
+  state.session = session;
+  state.members = members || [];
+  state.items = items || [];
+  state.scores = scores || [];
+  // pick first option for comparative mode
+  if (state.session.mode === 'comparative' && state.session.options.length > 0) {
+    if (!state.session.options.find(o => o.id === state.activeOptionId)) {
+      state.activeOptionId = state.session.options[0].id;
+    }
+  } else {
+    state.activeOptionId = 'main';
+  }
+}
+
+function subscribeRealtime(sessionId) {
+  if (state.channel) state.supabase.removeChannel(state.channel);
+
+  state.channel = state.supabase.channel(`sowhat:${sessionId}`)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` }, (payload) => {
+      if (payload.eventType === 'UPDATE') {
+        state.session = payload.new;
+        syncViewToPhase();
+        render();
+      }
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'members', filter: `session_id=eq.${sessionId}` }, async () => {
+      const { data } = await state.supabase.from('members').select('*').eq('session_id', sessionId);
+      state.members = data || [];
+      render();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'items', filter: `session_id=eq.${sessionId}` }, async () => {
+      const { data } = await state.supabase.from('items').select('*').eq('session_id', sessionId);
+      state.items = data || [];
+      render();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'scores', filter: `session_id=eq.${sessionId}` }, async () => {
+      const { data } = await state.supabase.from('scores').select('*').eq('session_id', sessionId);
+      state.scores = data || [];
+      render();
+    })
+    .subscribe();
+}
+
+async function unsubscribeRealtime() {
+  if (state.channel) {
+    await state.supabase.removeChannel(state.channel);
+    state.channel = null;
+  }
+}
+
+// Heartbeat - update last_seen every 20s
+let heartbeatInterval = null;
+function startHeartbeat() {
+  stopHeartbeat();
+  heartbeatInterval = setInterval(async () => {
+    if (!state.session || !state.user) return;
+    await state.supabase.from('members')
+      .update({ last_seen: new Date().toISOString() })
+      .eq('session_id', state.session.id).eq('user_id', state.user.id);
+  }, 20000);
+}
+function stopHeartbeat() {
+  if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+}
+
+function syncViewToPhase() {
+  if (state.session) state.view = state.session.phase;
+}
+
+// ============================================================================
+// CRUD operations
+// ============================================================================
+async function addItem(category, text) {
+  if (!text.trim()) return;
+  const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+  const { error } = await state.supabase.from('items').insert({
+    session_id: state.session.id,
+    option_id: optionId,
+    category, text: text.trim(),
+    author_id: state.user.id,
+    author_name: getMyMember()?.name || state.user.name,
+  });
+  if (error) toast(error.message, 'error');
+}
+
+async function updateItemText(itemId, text) {
+  const { error } = await state.supabase.from('items').update({ text: text.trim() }).eq('id', itemId);
+  if (error) toast(error.message, 'error');
+}
+
+async function deleteItem(itemId) {
+  const { error } = await state.supabase.from('items').delete().eq('id', itemId);
+  if (error) toast(error.message, 'error');
+}
+
+async function setScore(itemId, score) {
+  const { error } = await state.supabase.from('scores').upsert({
+    session_id: state.session.id,
+    item_id: itemId,
+    user_id: state.user.id,
+    score,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'item_id,user_id' });
+  if (error) toast(error.message, 'error');
+}
+
+async function setIdentifyDone(done) {
+  const { error } = await state.supabase.from('members')
+    .update({ identify_done: done })
+    .eq('session_id', state.session.id).eq('user_id', state.user.id);
+  if (error) toast(error.message, 'error');
+}
+
+async function setScoreSubmitted(optionId, submitted) {
+  const me = getMyMember();
+  const updated = { ...(me?.score_submitted || {}), [optionId]: submitted };
+  const { error } = await state.supabase.from('members')
+    .update({ score_submitted: updated })
+    .eq('session_id', state.session.id).eq('user_id', state.user.id);
+  if (error) toast(error.message, 'error');
+}
+
+async function advancePhase(toPhase) {
+  const { error } = await state.supabase.from('sessions')
+    .update({ phase: toPhase, updated_at: new Date().toISOString() })
+    .eq('id', state.session.id);
+  if (error) toast(error.message, 'error');
+}
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+function isLead() { return state.session && state.session.lead_id === state.user.id; }
+function getMyMember() { return state.members.find(m => m.user_id === state.user.id); }
+function memberById(id) { return state.members.find(m => m.user_id === id); }
+
+function itemsForOption(optionId, category) {
+  return state.items.filter(i => i.option_id === optionId && i.category === category);
+}
+
+function myScoreFor(itemId) {
+  const s = state.scores.find(sc => sc.item_id === itemId && sc.user_id === state.user.id);
+  return s ? s.score : null;
+}
+
+function identifyDoneCount() {
+  return state.members.filter(m => m.identify_done).length;
+}
+
+function scoreSubmittedCount(optionId) {
+  return state.members.filter(m => m.score_submitted && m.score_submitted[optionId]).length;
+}
+
+function scoreSubmittedCountAll() {
+  // For binary: just count main; for comparative: count members done with ALL options
+  if (state.session.mode === 'binary') {
+    return scoreSubmittedCount('main');
+  }
+  return state.members.filter(m => {
+    if (!m.score_submitted) return false;
+    return state.session.options.every(o => m.score_submitted[o.id]);
+  }).length;
+}
+
+function isMemberOnline(member) {
+  if (!member.last_seen) return false;
+  const ageMs = Date.now() - new Date(member.last_seen).getTime();
+  return ageMs < 60000; // active if seen in last minute
+}
+// ============================================================================
+// RENDER - master dispatch
+// ============================================================================
+function render() {
+  const app = document.getElementById('app');
+  switch (state.view) {
+    case 'loading': app.innerHTML = renderLoading(); break;
+    case 'config': app.innerHTML = renderConfig(); attachConfigHandlers(); break;
+    case 'setup': app.innerHTML = renderSetup(); attachSetupHandlers(); break;
+    case 'lobby': app.innerHTML = renderShell(renderLobby()); attachShellHandlers(); attachLobbyHandlers(); break;
+    case 'identify': app.innerHTML = renderShell(renderIdentify()); attachShellHandlers(); attachIdentifyHandlers(); break;
+    case 'consolidate': app.innerHTML = renderShell(renderConsolidate()); attachShellHandlers(); attachConsolidateHandlers(); break;
+    case 'score': app.innerHTML = renderShell(renderScore()); attachShellHandlers(); attachScoreHandlers(); break;
+    case 'results': app.innerHTML = renderShell(renderResults()); attachShellHandlers(); attachResultsHandlers(); break;
+    default: app.innerHTML = '<div class="loading-screen"><div class="spinner"></div><div>Loading…</div></div>';
+  }
+}
+
+function renderLoading() {
+  return '<div class="loading-screen"><div class="spinner"></div><div>Loading…</div></div>';
+}
+
+// ============================================================================
+// CONFIG SCREEN — Supabase setup
+// ============================================================================
+function renderConfig() {
+  return `
+    <header class="app-header">
+      <div class="logo"><div class="logo-mark">SO</div>SO-WhaT</div>
+      <div class="header-spacer"></div>
+      <button class="btn btn-ghost btn-icon" id="theme-toggle" title="Theme"><svg><use href="#${loadTheme() === 'dark' ? 'i-moon' : 'i-sun'}"/></svg></button>
+    </header>
+    <div class="content narrow">
+      <div class="hero">
+        <div class="hero-eyebrow"><svg width="12" height="12"><use href="#i-settings"/></svg> Initial setup</div>
+        <h1>Connect to <span class="accent">Supabase</span></h1>
+        <p>Paste in the two values from your Supabase project. This is a one-time step per device — the values are stored locally in your browser.</p>
+      </div>
+      <div class="card" style="margin-top:24px">
+        <div class="field">
+          <label>Project URL</label>
+          <input class="input" id="cfg-url" placeholder="https://abcdefg.supabase.co" autocomplete="off">
+          <div class="hint">From Supabase → Settings → API → Project URL</div>
+        </div>
+        <div class="field">
+          <label>Anon public key</label>
+          <textarea class="textarea" id="cfg-key" placeholder="eyJ…" autocomplete="off" style="font-family:'JetBrains Mono',monospace;font-size:12px;min-height:90px"></textarea>
+          <div class="hint">From Supabase → Settings → API → Project API keys → <strong>anon public</strong> (NOT service_role)</div>
+        </div>
+        <div class="btn-row end">
+          <button class="btn btn-primary btn-lg" id="cfg-connect">Connect <svg><use href="#i-arrow-right"/></svg></button>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--text-tertiary)">
+        Don't have a project yet? See the <code class="kbd">SUPABASE_SETUP.md</code> guide that came with this tool.
+      </div>
+    </div>
+  `;
+}
+
+function attachConfigHandlers() {
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+  document.getElementById('cfg-connect').addEventListener('click', async () => {
+    const url = document.getElementById('cfg-url').value.trim().replace(/\/$/, '');
+    const anonKey = document.getElementById('cfg-key').value.trim();
+    if (!url || !anonKey) { toast('Both fields are required', 'error'); return; }
+    if (!/^https:\/\/.+\.supabase\.co$/.test(url)) { toast('URL should look like https://xxx.supabase.co', 'error'); return; }
+    state.config = { url, anonKey };
+    saveConfig(state.config);
+    const ok = await initSupabase();
+    if (ok) {
+      toast('Connected!', 'success');
+      state.view = 'setup';
+      render();
+    } else {
+      clearConfig();
+      state.config = null;
+    }
+  });
+}
+
+// ============================================================================
+// SETUP SCREEN — create or join
+// ============================================================================
+function renderSetup() {
+  const u = state.user || {};
+  return `
+    <header class="app-header">
+      <div class="logo"><div class="logo-mark">SO</div>SO-WhaT</div>
+      <div class="header-spacer"></div>
+      <button class="btn btn-ghost btn-icon" id="theme-toggle" title="Theme"><svg><use href="#${loadTheme() === 'dark' ? 'i-moon' : 'i-sun'}"/></svg></button>
+      ${!isPreconfigured() ? `<button class="btn btn-ghost btn-icon" id="reconfigure" title="Reconfigure Supabase"><svg><use href="#i-settings"/></svg></button>` : ''}
+    </header>
+    <div class="content narrow">
+      <div class="hero">
+        <div class="hero-eyebrow"><svg width="12" height="12"><use href="#i-zap"/></svg> Virtual Decision Tool</div>
+        <h1>Make better decisions, <span class="accent">together</span>.</h1>
+        <p>Run a structured SWOT analysis with up to 10 teammates — async, bias-free, and quantitative. Based on the SO-WhaT methodology.</p>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-card featured">
+          <div class="setup-icon"><svg><use href="#i-target"/></svg></div>
+          <h3>Start a new analysis</h3>
+          <p class="desc">Set up the question and invite your team.</p>
+          <div class="field">
+            <label>Decision title</label>
+            <input class="input" id="new-title" placeholder="e.g. Mark II Q3 launch">
+          </div>
+          <div class="field">
+            <label>Decision question (optional)</label>
+            <input class="input" id="new-question" placeholder="e.g. Should we launch the Mark II prototype in Q3?">
+          </div>
+          <div class="field">
+            <label>Decision type</label>
+            <div class="radio-group" id="mode-group">
+              <div class="radio-card checked" data-mode="binary"><div class="label">Binary</div><div class="hint">Go / no-go</div></div>
+              <div class="radio-card" data-mode="comparative"><div class="label">Comparative</div><div class="hint">2–10 options</div></div>
+            </div>
+          </div>
+          <div class="field" id="options-field" style="display:none">
+            <label>Options to compare</label>
+            <div class="options-list" id="options-list">
+              <div class="option-row"><span class="num">A</span><input class="input" placeholder="Option A name" data-opt="0"></div>
+              <div class="option-row"><span class="num">B</span><input class="input" placeholder="Option B name" data-opt="1"></div>
+            </div>
+            <button class="btn btn-secondary" id="add-option" style="margin-top:8px"><svg><use href="#i-plus"/></svg> Add option</button>
+          </div>
+          <div class="field">
+            <label>Your name</label>
+            <input class="input" id="new-name" placeholder="Team lead name" value="${esc(u.name || '')}">
+          </div>
+          <button class="btn btn-primary btn-lg" id="btn-create" style="width:100%;justify-content:center;margin-top:8px">
+            Create session <svg><use href="#i-arrow-right"/></svg>
+          </button>
+        </div>
+        <div class="setup-card${state.pendingJoinCode ? ' featured' : ''}">
+          <div class="setup-icon"><svg><use href="#i-user-plus"/></svg></div>
+          <h3>${state.pendingJoinCode ? "You're invited!" : 'Join a session'}</h3>
+          <p class="desc">${state.pendingJoinCode ? 'The code from your invite link is already filled in. Just add your name.' : 'Enter the 6-character code from your team lead.'}</p>
+          <div class="field">
+            <label>Session code</label>
+            <input class="input code-input" id="join-code" placeholder="XXXXXX" maxlength="6" autocomplete="off" value="${esc(state.pendingJoinCode || '')}">
+          </div>
+          <div class="field">
+            <label>Your name</label>
+            <input class="input" id="join-name" placeholder="How teammates will see you" value="${esc(u.name || '')}">
+          </div>
+          <button class="btn ${state.pendingJoinCode ? 'btn-primary' : 'btn-secondary'} btn-lg" id="btn-join" style="width:100%;justify-content:center;margin-top:8px">
+            Join team <svg><use href="#i-arrow-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function attachSetupHandlers() {
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+  const reconfigureBtn = document.getElementById('reconfigure');
+  if (reconfigureBtn) reconfigureBtn.addEventListener('click', () => {
+    if (confirm('Reset Supabase connection? You\'ll need to paste your URL and key again.')) {
+      clearConfig(); state.config = null; state.supabase = null;
+      state.view = 'config'; render();
+    }
+  });
+
+  // If user arrived via invite link, focus the name field (code is already filled)
+  if (state.pendingJoinCode) {
+    const nameInput = document.getElementById('join-name');
+    if (nameInput) {
+      nameInput.focus();
+      // Scroll the join card into view on small screens
+      nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  // Mode toggle
+  document.querySelectorAll('#mode-group .radio-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('#mode-group .radio-card').forEach(c => c.classList.toggle('checked', c === card));
+      const mode = card.dataset.mode;
+      document.getElementById('options-field').style.display = mode === 'comparative' ? 'block' : 'none';
+    });
+  });
+
+  // Add option
+  document.getElementById('add-option').addEventListener('click', () => {
+    const list = document.getElementById('options-list');
+    const count = list.children.length;
+    if (count >= 10) { toast('Maximum 10 options', 'warning'); return; }
+    const letter = String.fromCharCode(65 + count);
+    const row = document.createElement('div');
+    row.className = 'option-row';
+    row.innerHTML = `<span class="num">${letter}</span><input class="input" placeholder="Option ${letter} name" data-opt="${count}"><button class="icon-btn danger" data-remove="${count}" title="Remove"><svg><use href="#i-x"/></svg></button>`;
+    list.appendChild(row);
+    row.querySelector('[data-remove]').addEventListener('click', () => row.remove());
+  });
+
+  // Create
+  document.getElementById('btn-create').addEventListener('click', async () => {
+    const title = document.getElementById('new-title').value.trim();
+    const question = document.getElementById('new-question').value.trim();
+    const name = document.getElementById('new-name').value.trim();
+    const modeCard = document.querySelector('#mode-group .radio-card.checked');
+    const mode = modeCard.dataset.mode;
+    if (!title) { toast('Title is required', 'error'); return; }
+    if (!name) { toast('Your name is required', 'error'); return; }
+
+    let options = [];
+    if (mode === 'comparative') {
+      options = [...document.querySelectorAll('#options-list input[data-opt]')]
+        .map(i => i.value.trim()).filter(Boolean);
+      if (options.length < 2) { toast('Need at least 2 options for comparative mode', 'error'); return; }
+    }
+
+    state.user = { id: state.user?.id || genId(), name };
+    saveUser(state.user);
+
+    const btn = document.getElementById('btn-create');
+    btn.disabled = true; btn.innerHTML = 'Creating…';
+    try {
+      const session = await createSession({ title, question, mode, options, leadName: name });
+      setCurrent(session.code, 'lead');
+      await loadSessionData(session.id);
+      subscribeRealtime(session.id);
+      startHeartbeat();
+      syncViewToPhase();
+      render();
+    } catch (e) {
+      console.error(e);
+      toast('Could not create session: ' + e.message, 'error');
+      btn.disabled = false; btn.innerHTML = 'Create session';
+    }
+  });
+
+  // Join
+  document.getElementById('btn-join').addEventListener('click', async () => {
+    const code = document.getElementById('join-code').value.trim().toUpperCase();
+    const name = document.getElementById('join-name').value.trim();
+    if (code.length !== 6) { toast('Code must be 6 characters', 'error'); return; }
+    if (!name) { toast('Your name is required', 'error'); return; }
+
+    state.user = { id: state.user?.id || genId(), name };
+    saveUser(state.user);
+
+    const btn = document.getElementById('btn-join');
+    btn.disabled = true; btn.innerHTML = 'Joining…';
+    try {
+      const session = await joinSession(code, name);
+      setCurrent(session.code, 'member');
+      await loadSessionData(session.id);
+      subscribeRealtime(session.id);
+      startHeartbeat();
+      syncViewToPhase();
+      state.pendingJoinCode = null;
+      render();
+    } catch (e) {
+      console.error(e);
+      toast(e.message || 'Could not join session', 'error');
+      btn.disabled = false; btn.innerHTML = 'Join team';
+    }
+  });
+
+  // Auto-uppercase code input
+  document.getElementById('join-code').addEventListener('input', e => {
+    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  });
+}
+
+// ============================================================================
+// SHELL — header + stepper, used inside session
+// ============================================================================
+function renderShell(inner) {
+  const s = state.session;
+  if (!s) return inner;
+  return `
+    ${renderAppHeader()}
+    ${renderPhaseStepper()}
+    ${inner}
+  `;
+}
+
+function renderAppHeader() {
+  const s = state.session;
+  return `
+    <header class="app-header">
+      <div class="logo" id="app-home"><div class="logo-mark">SO</div>SO-WhaT</div>
+      <div class="session-pill">
+        <svg width="14" height="14"><use href="#i-target"/></svg>
+        <span class="title-text">${esc(s.title)}</span>
+        <span class="code">${esc(s.code)}</span>
+      </div>
+      <div class="header-spacer"></div>
+      ${renderMemberStack()}
+      <button class="btn btn-ghost btn-icon" id="theme-toggle" title="Theme"><svg><use href="#${loadTheme() === 'dark' ? 'i-moon' : 'i-sun'}"/></svg></button>
+      <button class="btn btn-ghost btn-icon" id="leave-session" title="Leave session"><svg><use href="#i-log-out"/></svg></button>
+    </header>
+  `;
+}
+
+function renderMemberStack() {
+  const max = 4;
+  const m = state.members.slice(0, max);
+  const more = state.members.length - max;
+  return `
+    <div class="member-stack">
+      ${m.map((mem, i) => `<div class="avatar" title="${esc(mem.name)}" style="${avatarStyle(state.members.indexOf(mem))}">${esc(initials(mem.name))}</div>`).join('')}
+      ${more > 0 ? `<div class="more">+${more}</div>` : ''}
+    </div>
+  `;
+}
+
+function renderPhaseStepper() {
+  const cur = PHASE_NUMS[state.session.phase];
+  const stepperPhases = ['identify', 'consolidate', 'score', 'results'];
+  // Compute live progress for the active phase
+  let progressBadge = '';
+  const totalMembers = state.members.length;
+
+  if (state.session.phase === 'identify') {
+    const done = identifyDoneCount();
+    progressBadge = renderProgressBadge(done, totalMembers, done >= totalMembers);
+  } else if (state.session.phase === 'score') {
+    const done = scoreSubmittedCountAll();
+    progressBadge = renderProgressBadge(done, totalMembers, done >= totalMembers);
+  }
+
+  const items = stepperPhases.map((p, i) => {
+    const num = i + 1;
+    const phaseNum = PHASE_NUMS[p];
+    let cls = 'todo';
+    if (phaseNum < cur) cls = 'done';
+    else if (phaseNum === cur) cls = 'active';
+    const circle = cls === 'done' ? '<svg width="14" height="14"><use href="#i-check"/></svg>' : num;
+    const showProgress = cls === 'active' && (p === 'identify' || p === 'score');
+    return `
+      <div class="stepper-item ${cls}">
+        <div class="stepper-circle">${circle}</div>
+        <div class="stepper-label">
+          <span class="top">Phase ${num}</span>
+          <span class="bottom">${PHASE_LABELS[p]}</span>
+        </div>
+        ${showProgress ? progressBadge : ''}
+      </div>
+      ${i < stepperPhases.length - 1 ? `<div class="stepper-line ${phaseNum < cur ? 'done' : ''}"></div>` : ''}
+    `;
+  }).join('');
+  return `<div class="phase-stepper">${items}</div>`;
+}
+
+function renderProgressBadge(done, total, complete) {
+  const cls = complete ? 'complete' : '';
+  return `<span class="stepper-progress ${cls}" title="${esc(done + ' of ' + total + ' done')}"><svg><use href="#i-users"/></svg> ${done} / ${total}</span>`;
+}
+
+function attachShellHandlers() {
+  const home = document.getElementById('app-home');
+  if (home) home.addEventListener('click', () => {
+    if (confirm('Leave this session and return home?')) leaveSession();
+  });
+  const theme = document.getElementById('theme-toggle');
+  if (theme) theme.addEventListener('click', toggleTheme);
+  const leave = document.getElementById('leave-session');
+  if (leave) leave.addEventListener('click', () => {
+    if (confirm('Leave this session?')) leaveSession();
+  });
+}
+
+async function leaveSession() {
+  await unsubscribeRealtime();
+  stopHeartbeat();
+  setCurrent(null);
+  state.session = null;
+  state.members = [];
+  state.items = [];
+  state.scores = [];
+  state.view = 'setup';
+  render();
+}
+
+function toggleTheme() {
+  const cur = loadTheme();
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  saveTheme(next);
+  render();
+}
+
+// ============================================================================
+// LOBBY
+// ============================================================================
+function renderLobby() {
+  const s = state.session;
+  const lead = isLead();
+  return `
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Waiting room</h1>
+          <p class="page-subtitle">${esc(s.question || s.title)}</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${lead ? `
+            <button class="btn btn-primary" id="btn-begin" ${state.members.length < 2 ? 'disabled' : ''}>
+              Begin identification <svg><use href="#i-arrow-right"/></svg>
+            </button>
+          ` : `<span class="badge neutral">Waiting on team lead to begin</span>`}
+        </div>
+      </div>
+
+      <div class="share-banner">
+        <div class="info">
+          <h3>Share to invite teammates</h3>
+          <p>One click on the invite link takes them straight to the join screen with the code pre-filled. Or share just the code if you prefer. Up to 10 members per session.</p>
+        </div>
+        <div class="share-code">
+          <div class="code-display" title="Session code">${esc(s.code)}</div>
+          <button class="btn btn-primary" id="btn-copy-link"><svg><use href="#i-share"/></svg> Copy invite link</button>
+          <button class="btn btn-secondary" id="btn-copy-code"><svg><use href="#i-copy"/></svg> Code only</button>
+        </div>
+      </div>
+
+      <div class="card flush">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Team members</h3>
+            <p class="card-subtitle">${state.members.length} of 10 joined${lead && state.members.length < 2 ? ' · need at least 2 members to begin' : ''}</p>
+          </div>
+          <div class="badge brand"><svg width="12" height="12"><use href="#i-users"/></svg> ${state.members.length} / 10</div>
+        </div>
+        <div style="padding: 16px">
+          ${state.members.length === 0 ? `<div class="empty-state">No members yet</div>` : `
+            <div class="member-list">
+              ${state.members.map((m, i) => renderMemberRow(m, i)).join('')}
+            </div>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMemberRow(m, idx) {
+  const isLeadMember = m.user_id === state.session.lead_id;
+  const online = isMemberOnline(m);
+  const ago = formatTimeAgo(m.joined_at);
+  return `
+    <div class="member-row">
+      <div class="avatar lg" style="${avatarStyle(idx)}">${esc(initials(m.name))}</div>
+      <div class="info">
+        <div class="name">${esc(m.name)}${isLeadMember ? '<span class="role-badge">Lead</span>' : ''}</div>
+        <div class="meta">Joined ${ago}</div>
+      </div>
+      <div class="status-dot ${online ? 'active' : 'idle'}" title="${online ? 'Online' : 'Idle'}"></div>
+    </div>
+  `;
+}
+
+function formatTimeAgo(iso) {
+  if (!iso) return 'just now';
+  const ageS = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (ageS < 30) return 'just now';
+  if (ageS < 90) return '1 min ago';
+  if (ageS < 3600) return Math.floor(ageS / 60) + ' min ago';
+  if (ageS < 7200) return '1 hour ago';
+  if (ageS < 86400) return Math.floor(ageS / 3600) + ' hours ago';
+  return Math.floor(ageS / 86400) + ' days ago';
+}
+
+function attachLobbyHandlers() {
+  const cl = document.getElementById('btn-copy-link');
+  if (cl) cl.addEventListener('click', () => {
+    const link = buildInviteLink(state.session.code);
+    navigator.clipboard.writeText(link).then(
+      () => toast('Invite link copied!', 'success'),
+      () => toast(link, 'info', 6000)  // fallback: show the link if clipboard blocked
+    );
+  });
+  const cc = document.getElementById('btn-copy-code');
+  if (cc) cc.addEventListener('click', () => {
+    navigator.clipboard.writeText(state.session.code).then(() => toast('Code copied!', 'success'));
+  });
+  const bg = document.getElementById('btn-begin');
+  if (bg) bg.addEventListener('click', () => advancePhase('identify'));
+}
+// ============================================================================
+// OPTION TABS (comparative mode)
+// ============================================================================
+function renderOptionTabs() {
+  if (state.session.mode !== 'comparative') return '';
+  return `
+    <div class="option-tabs">
+      ${state.session.options.map(o => `
+        <button class="option-tab ${o.id === state.activeOptionId ? 'active' : ''}" data-opt="${esc(o.id)}">${esc(o.name)}</button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function attachOptionTabHandlers() {
+  document.querySelectorAll('.option-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      state.activeOptionId = t.dataset.opt;
+      render();
+    });
+  });
+}
+
+// ============================================================================
+// IDENTIFY PHASE
+// ============================================================================
+function renderIdentify() {
+  const me = getMyMember();
+  const myDone = me?.identify_done || false;
+  const lead = isLead();
+  const allDone = state.members.length > 0 && state.members.every(m => m.identify_done);
+  const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+
+  return `
+    <div class="content wide">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Identify factors</h1>
+          <p class="page-subtitle">Add your own strengths, weaknesses, opportunities, and threats. Your items are private until everyone is done.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="badge neutral"><svg width="12" height="12"><use href="#i-eye-off"/></svg> Private to you</span>
+          ${myDone
+            ? `<button class="btn btn-secondary" id="btn-undone"><svg><use href="#i-edit"/></svg> Keep adding</button>`
+            : `<button class="btn btn-primary" id="btn-done">Done adding <svg><use href="#i-check"/></svg></button>`}
+          ${lead ? `<button class="btn btn-primary" id="btn-advance" ${!allDone ? 'disabled title="Wait for all members to finish"' : ''}>Advance to consolidate <svg><use href="#i-arrow-right"/></svg></button>` : ''}
+        </div>
+      </div>
+
+      ${renderOptionTabs()}
+
+      <div class="identify-layout">
+        <div class="identify-grid">
+          ${CATEGORIES.map(cat => renderIdentifyCard(cat, optionId, myDone)).join('')}
+        </div>
+        <div class="activity-card">
+          <div class="activity-header">
+            <h4>Team activity</h4>
+            <p>${identifyDoneCount()} of ${state.members.length} done · items hidden until phase ends</p>
+          </div>
+          <div class="activity-list">
+            ${state.members.map((m, i) => renderActivityRow(m, i, 'identify')).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderIdentifyCard(cat, optionId, locked) {
+  const myItems = state.items.filter(i =>
+    i.option_id === optionId && i.category === cat && i.author_id === state.user.id
+  );
+  return `
+    <div class="swot-card ${cat.toLowerCase()}">
+      <div class="swot-header">
+        <div class="title-group">
+          <div class="icon-circle">${cat}</div>
+          <div>
+            <div class="name">${CATEGORY_NAMES[cat]}</div>
+            <div class="desc">${CATEGORY_DESC[cat]}</div>
+          </div>
+        </div>
+        <span class="count">${myItems.length} ${myItems.length === 1 ? 'item' : 'items'}</span>
+      </div>
+      <div class="swot-body">
+        ${myItems.map(item => `
+          <div class="swot-item" data-item-id="${esc(item.id)}">
+            <span class="text">${esc(item.text)}</span>
+            ${!locked ? `<div class="actions">
+              <button class="icon-btn" data-action="edit" title="Edit"><svg><use href="#i-edit"/></svg></button>
+              <button class="icon-btn danger" data-action="delete" title="Remove"><svg><use href="#i-trash"/></svg></button>
+            </div>` : ''}
+          </div>
+        `).join('')}
+        ${!locked ? `
+          <div class="add-item-row">
+            <input placeholder="Add ${cat === 'O' ? 'an' : 'a'} ${CATEGORY_NAMES[cat].slice(0,-1).toLowerCase()}…" data-cat="${cat}">
+            <button class="btn btn-secondary" data-add="${cat}"><svg><use href="#i-plus"/></svg> Add</button>
+          </div>
+        ` : `<div class="empty-state" style="padding:8px">${myItems.length === 0 ? 'No items added' : 'Editing locked — click "Keep adding" to unlock'}</div>`}
+      </div>
+    </div>
+  `;
+}
+
+function renderActivityRow(m, idx, phase) {
+  let status = '';
+  let dotCls = 'idle';
+  if (phase === 'identify') {
+    const myItemCount = state.items.filter(i => i.author_id === m.user_id).length;
+    if (m.identify_done) {
+      status = `Submitted · ${myItemCount} items`;
+      dotCls = 'done';
+    } else {
+      status = `${myItemCount} items added`;
+      dotCls = isMemberOnline(m) ? 'active' : 'idle';
+    }
+  } else if (phase === 'score') {
+    const submitted = state.session.mode === 'binary'
+      ? !!(m.score_submitted && m.score_submitted.main)
+      : state.session.options.every(o => m.score_submitted && m.score_submitted[o.id]);
+    if (submitted) { status = 'Submitted scores'; dotCls = 'done'; }
+    else {
+      const myScores = state.scores.filter(s => s.user_id === m.user_id).length;
+      status = `${myScores} items scored`;
+      dotCls = isMemberOnline(m) ? 'active' : 'idle';
+    }
+  }
+  return `
+    <div class="activity-row">
+      <div class="avatar" style="${avatarStyle(idx)}">${esc(initials(m.name))}</div>
+      <div class="info">
+        <div class="name">${esc(m.name)}${m.user_id === state.session.lead_id ? '<span class="role-badge">Lead</span>' : ''}</div>
+        <div class="status"><div class="status-dot ${dotCls}"></div> ${status}</div>
+      </div>
+    </div>
+  `;
+}
+
+function attachIdentifyHandlers() {
+  attachOptionTabHandlers();
+
+  // Add via button
+  document.querySelectorAll('[data-add]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const cat = btn.dataset.add;
+      const input = document.querySelector(`input[data-cat="${cat}"]`);
+      const text = input.value.trim();
+      if (text) { await addItem(cat, text); input.value = ''; input.focus(); }
+    });
+  });
+  // Add via Enter
+  document.querySelectorAll('input[data-cat]').forEach(input => {
+    input.addEventListener('keydown', async e => {
+      if (e.key === 'Enter') {
+        const cat = input.dataset.cat;
+        const text = input.value.trim();
+        if (text) { await addItem(cat, text); input.value = ''; }
+      }
+    });
+  });
+  // Edit
+  document.querySelectorAll('[data-action="edit"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = btn.closest('.swot-item');
+      const id = row.dataset.itemId;
+      const item = state.items.find(i => i.id === id);
+      const next = prompt('Edit item', item.text);
+      if (next != null && next.trim() && next.trim() !== item.text) updateItemText(id, next);
+    });
+  });
+  // Delete
+  document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = btn.closest('.swot-item');
+      const id = row.dataset.itemId;
+      if (confirm('Remove this item?')) deleteItem(id);
+    });
+  });
+  // Done / Keep adding
+  const done = document.getElementById('btn-done');
+  if (done) done.addEventListener('click', () => setIdentifyDone(true));
+  const undone = document.getElementById('btn-undone');
+  if (undone) undone.addEventListener('click', () => setIdentifyDone(false));
+  // Advance (lead only)
+  const adv = document.getElementById('btn-advance');
+  if (adv) adv.addEventListener('click', () => {
+    if (confirm('Advance to consolidation phase? You can review and de-duplicate everyone\'s items there.')) {
+      advancePhase('consolidate');
+    }
+  });
+}
+
+// ============================================================================
+// CONSOLIDATE PHASE — lead reviews + edits all items together
+// ============================================================================
+function renderConsolidate() {
+  const lead = isLead();
+  const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+
+  return `
+    <div class="content wide">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Consolidate items</h1>
+          <p class="page-subtitle">${lead
+            ? 'Review the combined list. Remove duplicates and edit text to clean up the items everyone will score.'
+            : 'The team lead is reviewing the combined list. Items will be locked once we move to scoring.'}</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${lead ? `
+            <button class="btn btn-secondary" id="btn-back">Back to identify</button>
+            <button class="btn btn-primary" id="btn-to-score">Begin scoring <svg><use href="#i-arrow-right"/></svg></button>
+          ` : `<span class="badge neutral">Waiting on team lead</span>`}
+        </div>
+      </div>
+
+      ${renderOptionTabs()}
+
+      <div class="identify-grid">
+        ${CATEGORIES.map(cat => renderConsolidateCard(cat, optionId, lead)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderConsolidateCard(cat, optionId, canEdit) {
+  const items = itemsForOption(optionId, cat);
+  return `
+    <div class="swot-card ${cat.toLowerCase()}">
+      <div class="swot-header">
+        <div class="title-group">
+          <div class="icon-circle">${cat}</div>
+          <div>
+            <div class="name">${CATEGORY_NAMES[cat]}</div>
+            <div class="desc">${CATEGORY_DESC[cat]}</div>
+          </div>
+        </div>
+        <span class="count">${items.length} ${items.length === 1 ? 'item' : 'items'}</span>
+      </div>
+      <div class="swot-body">
+        ${items.length === 0 ? `<div class="empty-state">No items in this category</div>` : items.map(item => {
+          const idx = state.members.findIndex(m => m.user_id === item.author_id);
+          return `
+            <div class="swot-item" data-item-id="${esc(item.id)}">
+              <span class="text">${esc(item.text)}</span>
+              <div class="author-pill" title="${esc(item.author_name)}">
+                <div class="avatar sm" style="${avatarStyle(idx >= 0 ? idx : 0)}">${esc(initials(item.author_name))}</div>
+              </div>
+              ${canEdit ? `<div class="actions">
+                <button class="icon-btn" data-action="edit" title="Edit"><svg><use href="#i-edit"/></svg></button>
+                <button class="icon-btn danger" data-action="delete" title="Remove duplicate"><svg><use href="#i-trash"/></svg></button>
+              </div>` : ''}
+            </div>
+          `;
+        }).join('')}
+        ${canEdit ? `
+          <div class="add-item-row">
+            <input placeholder="Add ${cat === 'O' ? 'an' : 'a'} ${CATEGORY_NAMES[cat].slice(0,-1).toLowerCase()}…" data-cat="${cat}">
+            <button class="btn btn-secondary" data-add="${cat}"><svg><use href="#i-plus"/></svg> Add</button>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function attachConsolidateHandlers() {
+  attachOptionTabHandlers();
+
+  document.querySelectorAll('[data-add]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const cat = btn.dataset.add;
+      const input = document.querySelector(`input[data-cat="${cat}"]`);
+      const text = input.value.trim();
+      if (text) { await addItem(cat, text); input.value = ''; input.focus(); }
+    });
+  });
+  document.querySelectorAll('input[data-cat]').forEach(input => {
+    input.addEventListener('keydown', async e => {
+      if (e.key === 'Enter') {
+        const cat = input.dataset.cat;
+        const text = input.value.trim();
+        if (text) { await addItem(cat, text); input.value = ''; }
+      }
+    });
+  });
+  document.querySelectorAll('[data-action="edit"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.closest('.swot-item').dataset.itemId;
+      const item = state.items.find(i => i.id === id);
+      const next = prompt('Edit item', item.text);
+      if (next != null && next.trim() && next.trim() !== item.text) updateItemText(id, next);
+    });
+  });
+  document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.closest('.swot-item').dataset.itemId;
+      if (confirm('Remove this item?')) deleteItem(id);
+    });
+  });
+  const back = document.getElementById('btn-back');
+  if (back) back.addEventListener('click', () => advancePhase('identify'));
+  const next = document.getElementById('btn-to-score');
+  if (next) next.addEventListener('click', () => {
+    // Make sure each option (in comparative) has at least one item per category
+    const optionIds = state.session.mode === 'comparative' ? state.session.options.map(o => o.id) : ['main'];
+    let warnings = [];
+    for (const optId of optionIds) {
+      const optName = state.session.mode === 'comparative'
+        ? state.session.options.find(o => o.id === optId).name : '';
+      for (const cat of CATEGORIES) {
+        if (itemsForOption(optId, cat).length === 0) {
+          warnings.push(`${optName ? optName + ': ' : ''}no ${CATEGORY_NAMES[cat]}`);
+        }
+      }
+    }
+    if (warnings.length > 0) {
+      if (!confirm('Some categories are empty:\n\n' + warnings.join('\n') + '\n\nProceed anyway?')) return;
+    }
+    advancePhase('score');
+  });
+}
+
+// ============================================================================
+// SCORE PHASE
+// ============================================================================
+function renderScore() {
+  const me = getMyMember();
+  const lead = isLead();
+  const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+  const submitted = !!(me?.score_submitted && me.score_submitted[optionId]);
+  const allOptionsSubmitted = state.session.mode === 'binary'
+    ? submitted
+    : state.session.options.every(o => me?.score_submitted && me.score_submitted[o.id]);
+
+  // Item-level progress for the active option
+  const optionItems = state.items.filter(i => i.option_id === optionId);
+  const myScoredCount = optionItems.filter(i => myScoreFor(i.id) !== null).length;
+  const totalItems = optionItems.length;
+  const pct = totalItems > 0 ? Math.round((myScoredCount / totalItems) * 100) : 0;
+
+  // Team-wide submission tracking for advancing
+  const allDone = state.members.length > 0 && state.members.every(m => {
+    if (state.session.mode === 'binary') return m.score_submitted && m.score_submitted.main;
+    return state.session.options.every(o => m.score_submitted && m.score_submitted[o.id]);
+  });
+
+  return `
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Score each item</h1>
+          <p class="page-subtitle">Rate every item independently. Don't discuss with teammates until everyone has submitted.</p>
+        </div>
+        <div class="likert-legend">
+          <span><strong>0</strong> N/A</span>
+          <span><strong>1</strong> Low</span>
+          <span><strong>2</strong> Med</span>
+          <span><strong>3</strong> High</span>
+        </div>
+      </div>
+
+      ${renderOptionTabs()}
+
+      <div class="score-toolbar">
+        <div class="left">
+          <span class="progress-text">Your progress · <strong>${myScoredCount} of ${totalItems}</strong></span>
+          <div class="progress-bar"><div class="fill" style="width: ${pct}%"></div></div>
+        </div>
+        ${submitted
+          ? `<span class="badge success"><svg width="12" height="12"><use href="#i-check"/></svg> Submitted</span>`
+          : `<span class="badge warning">Not yet submitted</span>`}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:20px">
+        <div>
+          ${CATEGORIES.map(cat => renderScoreSection(cat, optionId, submitted)).join('')}
+        </div>
+        <div class="activity-card">
+          <div class="activity-header">
+            <h4>Team activity</h4>
+            <p>${scoreSubmittedCountAll()} of ${state.members.length} fully submitted</p>
+          </div>
+          <div class="activity-list">
+            ${state.members.map((m, i) => renderActivityRow(m, i, 'score')).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-bar">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+          <div class="progress-bar" style="width: 200px"><div class="fill" style="width: ${pct}%"></div></div>
+          <span style="font-size: 13px; color: var(--text-secondary);">${myScoredCount} of ${totalItems} items scored ${state.session.mode === 'comparative' ? '(this option)' : ''}</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${submitted
+            ? `<button class="btn btn-secondary" id="btn-unsubmit"><svg><use href="#i-edit"/></svg> Unsubmit & edit</button>`
+            : `<button class="btn btn-primary btn-lg" id="btn-submit" ${myScoredCount < totalItems ? 'disabled' : ''}>Submit my scores <svg><use href="#i-check"/></svg></button>`}
+          ${lead ? `<button class="btn btn-primary btn-lg" id="btn-results" ${!allDone ? 'disabled title="Wait for all members"' : ''}>See results <svg><use href="#i-arrow-right"/></svg></button>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderScoreSection(cat, optionId, submitted) {
+  const items = itemsForOption(optionId, cat);
+  if (items.length === 0) return '';
+  return `
+    <div class="score-section ${cat.toLowerCase()}">
+      <div class="score-section-header">
+        <div class="swot-header" style="background:none;padding:0;border:none">
+          <div class="title-group">
+            <div class="icon-circle" style="background:var(--${cat === 'S' ? 'strength' : cat === 'W' ? 'weakness' : cat === 'O' ? 'opportunity' : 'threat'}-bg);color:var(--${cat === 'S' ? 'strength' : cat === 'W' ? 'weakness' : cat === 'O' ? 'opportunity' : 'threat'})">${cat}</div>
+            <div>
+              <div class="name">${CATEGORY_NAMES[cat]}</div>
+              <div class="desc" style="color:var(--text-tertiary)">${items.length} ${items.length === 1 ? 'item' : 'items'} combined</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${items.map(item => {
+        const myScore = myScoreFor(item.id);
+        return `
+          <div class="score-row" data-item="${esc(item.id)}">
+            <div class="text">${esc(item.text)}</div>
+            <div class="score-segments">
+              ${[0,1,2,3].map(n => `
+                <button class="score-seg ${myScore === n ? `selected ${cat.toLowerCase()}` : ''}" data-score="${n}" ${submitted ? 'disabled' : ''}>${n}</button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function attachScoreHandlers() {
+  attachOptionTabHandlers();
+
+  document.querySelectorAll('.score-seg[data-score]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (btn.disabled) return;
+      const row = btn.closest('.score-row');
+      const itemId = row.dataset.item;
+      const score = parseInt(btn.dataset.score);
+      // Optimistic
+      const cat = btn.closest('.score-section').classList[1];
+      row.querySelectorAll('.score-seg').forEach(b => b.classList.remove('selected', 's', 'w', 'o', 't'));
+      btn.classList.add('selected', cat);
+      await setScore(itemId, score);
+    });
+  });
+
+  const submit = document.getElementById('btn-submit');
+  if (submit) submit.addEventListener('click', async () => {
+    const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+    await setScoreSubmitted(optionId, true);
+    toast('Scores submitted!', 'success');
+    // If comparative, auto-advance to next unsubmitted option
+    if (state.session.mode === 'comparative') {
+      const me = getMyMember();
+      const updated = { ...(me?.score_submitted || {}), [optionId]: true };
+      const nextOption = state.session.options.find(o => !updated[o.id]);
+      if (nextOption) {
+        state.activeOptionId = nextOption.id;
+        toast(`Now scoring: ${nextOption.name}`, 'info', 2000);
+      }
+    }
+  });
+
+  const unsubmit = document.getElementById('btn-unsubmit');
+  if (unsubmit) unsubmit.addEventListener('click', async () => {
+    const optionId = state.session.mode === 'comparative' ? state.activeOptionId : 'main';
+    await setScoreSubmitted(optionId, false);
+  });
+
+  const results = document.getElementById('btn-results');
+  if (results) results.addEventListener('click', () => {
+    if (confirm('Advance to results? Scoring will be locked.')) advancePhase('results');
+  });
+}
+
+// ============================================================================
+// RESULTS PHASE
+// ============================================================================
+function renderResults() {
+  const lead = isLead();
+  const isComparative = state.session.mode === 'comparative';
+
+  if (isComparative) {
+    return renderComparativeResults(lead);
+  }
+
+  // Binary: single option
+  const calc = calculateForOption('main');
+  return `
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Analysis complete</h1>
+          <p class="page-subtitle">${state.members.length} members · ${calc.totalItems} items · scored on a 0–3 Likert scale</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="btn-pdf"><svg><use href="#i-download"/></svg> Download PDF</button>
+          ${lead ? `<button class="btn btn-secondary" id="btn-back-to-score">Back to scoring</button>` : ''}
+        </div>
+      </div>
+
+      ${renderResultsBody(calc, '')}
+    </div>
+  `;
+}
+
+function renderComparativeResults(lead) {
+  const calcs = state.session.options.map(o => ({ option: o, calc: calculateForOption(o.id) }));
+  const sorted = [...calcs].sort((a, b) => b.calc.recommendation - a.calc.recommendation);
+  const winner = sorted[0];
+  const active = calcs.find(c => c.option.id === state.activeOptionId) || calcs[0];
+
+  return `
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Comparative analysis</h1>
+          <p class="page-subtitle">${state.members.length} members · ${state.session.options.length} options compared</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="btn-pdf"><svg><use href="#i-download"/></svg> Download PDF</button>
+          ${lead ? `<button class="btn btn-secondary" id="btn-back-to-score">Back to scoring</button>` : ''}
+        </div>
+      </div>
+
+      <div class="card flush" style="margin-bottom:20px">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Ranked comparison</h3>
+            <p class="card-subtitle">Top option: <strong>${esc(winner.option.name)}</strong></p>
+          </div>
+        </div>
+        <div style="padding: 0 4px 8px">
+          <table class="compare-table">
+            <thead>
+              <tr><th>Rank</th><th>Option</th><th>Recommendation</th><th>Verdict</th><th>SOWT</th><th>NCV</th><th>Quadrant</th></tr>
+            </thead>
+            <tbody>
+              ${sorted.map((c, i) => {
+                const v = VERDICT_INFO[c.calc.verdict];
+                const sign = c.calc.recommendation >= 0 ? '+' : '';
+                return `
+                  <tr ${i === 0 ? 'class="winner"' : ''}>
+                    <td class="rank-cell">#${i + 1}</td>
+                    <td>${esc(c.option.name)}</td>
+                    <td class="num">${sign}${c.calc.recommendation.toFixed(3)}</td>
+                    <td class="rec">${v.label}</td>
+                    <td class="num">${c.calc.sowt.toFixed(3)}</td>
+                    <td class="num">${c.calc.NCV.toFixed(3)}</td>
+                    <td class="num">${c.calc.subQuadrant}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;margin:0 0 12px;letter-spacing:-0.01em">Detail · ${esc(active.option.name)}</h3>
+      ${renderOptionTabs()}
+      ${renderResultsBody(active.calc, active.option.name)}
+
+      <div style="margin-top:24px">
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 12px;letter-spacing:-0.01em">All options on one plot</h3>
+        <div class="plot-card">
+          ${render2DPlotMulti(calcs)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderResultsBody(calc, optionLabel) {
+  const v = VERDICT_INFO[calc.verdict];
+  const sign = calc.recommendation >= 0 ? '+' : '';
+  const markerPct = ((calc.recommendation + 1) / 2) * 100;
+  const sowtSign = calc.sowt >= 0 ? '+' : '';
+  const vecSign = calc.vectorScore >= 0 ? '+' : '';
+  const vectorContrib = 0.75 * calc.vectorScore;
+  const sowtContrib = 0.25 * calc.sowt;
+  const verdictDir = calc.verdict.startsWith('yes') ? 'yes' : calc.verdict.startsWith('no') ? 'no' : 'maybe';
+
+  return `
+    <div class="rec-card ${calc.verdict}">
+      <div class="rec-top">
+        <div class="rec-icon ${v.iconClass}"><svg><use href="#${v.icon}"/></svg></div>
+        <div class="rec-content">
+          <div class="label">${optionLabel ? esc(optionLabel) + ' · Recommendation' : 'Team recommendation'}</div>
+          <h2>${esc(v.headline)}</h2>
+          <p>${esc(v.desc)}</p>
+        </div>
+      </div>
+      <div class="rec-scale">
+        <div class="rec-track">
+          <div class="rec-zone no-strong"></div>
+          <div class="rec-zone no-lean"></div>
+          <div class="rec-zone neutral"></div>
+          <div class="rec-zone yes-lean"></div>
+          <div class="rec-zone yes-strong"></div>
+          <div class="rec-marker" style="left: ${markerPct}%"></div>
+        </div>
+        <div class="rec-axis">
+          <span>Strong No</span><span>Lean No</span><span>Tossup</span><span>Lean Yes</span><span>Strong Yes</span>
+        </div>
+      </div>
+      <div class="rec-formula">
+        <div class="score-display">Recommendation score: <span class="${calc.recommendation >= 0 ? 'pos' : 'neg'}">${sign}${calc.recommendation.toFixed(3)}</span></div>
+        <div class="breakdown">
+          <code>0.75 × vector (${vecSign}${calc.vectorScore.toFixed(3)}) + 0.25 × SOWT (${sowtSign}${calc.sowt.toFixed(3)}) = ${sign}${calc.recommendation.toFixed(3)}</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-cards">
+      <div class="input-card primary">
+        <span class="weight-tag"><svg width="11" height="11"><use href="#i-target"/></svg> Primary signal · 75% weight</span>
+        <h3>Consensus vector</h3>
+        <p class="desc">Direction (quadrant) shows verdict; magnitude shows team alignment.</p>
+        <div class="vector-summary">
+          <div class="qbadge ${verdictDir === 'yes' ? 'yes' : verdictDir === 'no' ? 'no' : 'maybe'}">${calc.subQuadrant}</div>
+          <div class="vinfo">
+            <div class="quadrant-name">Quadrant ${calc.subQuadrant} — ${quadrantLabel(calc.subQuadrant)}</div>
+            <div class="vmag">NCV magnitude · <strong>${calc.NCV.toFixed(3)}</strong> · ${ncvLevel(calc.NCV)}</div>
+          </div>
+        </div>
+        <div class="contribution-row">
+          <span class="label-text">Contribution to recommendation</span>
+          <span class="value-text ${vectorContrib >= 0 ? 'pos' : 'neg'}">${vectorContrib >= 0 ? '+' : ''}${vectorContrib.toFixed(3)}</span>
+        </div>
+      </div>
+
+      <div class="input-card secondary">
+        <span class="weight-tag"><svg width="11" height="11"><use href="#i-info"/></svg> Secondary · 25% weight</span>
+        <h3>SOWT index</h3>
+        <p class="desc">1D scalar from <code style="font-family:JetBrains Mono;font-size:11px">((S+O) − (W+T)) / 6</code></p>
+        <div class="index-display-large">
+          <div class="num ${calc.sowt >= 0 ? 'pos' : 'neg'}">${sowtSign}${calc.sowt.toFixed(3)}</div>
+          <div class="label">${calc.sowt >= 0 ? 'Net positive' : 'Net negative'}</div>
+        </div>
+        <div class="contribution-row">
+          <span class="label-text">Contribution to recommendation</span>
+          <span class="value-text ${sowtContrib >= 0 ? 'pos' : 'neg'}">${sowtContrib >= 0 ? '+' : ''}${sowtContrib.toFixed(3)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="plot-card" style="margin-bottom:20px">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap:wrap; gap:8px">
+        <div>
+          <h3 class="card-title">2D consensus plot</h3>
+          <p class="card-subtitle" style="margin-top:2px">Vector magnitude shows team alignment · quadrant shows verdict direction</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge ${verdictDir === 'yes' ? 'success' : verdictDir === 'no' ? 'danger' : 'neutral'}">Q${calc.subQuadrant} · ${v.label}</span>
+          <span class="badge brand">|C| = ${calc.NCV.toFixed(3)}</span>
+        </div>
+      </div>
+      ${render2DPlot(calc.X, calc.Y, calc.subQuadrant)}
+    </div>
+
+    <div style="margin-top: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div>
+          <h3 style="font-size: 16px; font-weight: 700; margin: 0; letter-spacing: -0.01em;">Category breakdown</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin: 2px 0 0;">Mean importance score (0–3) across all team members and items.</p>
+        </div>
+      </div>
+      <div class="metric-cards">
+        ${['S', 'W', 'O', 't'].map(c => c.toLowerCase()).map((cat, i) => {
+          const labels = ['S', 'W', 'O', 'T'];
+          const C = labels[i];
+          const val = calc[C];
+          const pct = (val / 3) * 100;
+          return `
+            <div class="metric-card ${cat}">
+              <div class="label-row">
+                <span class="label">${CATEGORY_NAMES[C]}</span>
+                <span class="badge ${cat === 's' ? 'success' : cat === 'w' ? 'warning' : cat === 'o' ? 'brand' : 'danger'}">${C}</span>
+              </div>
+              <div class="value">${val.toFixed(2)}<span style="font-size:14px;color:var(--text-tertiary);font-weight:500"> / 3</span></div>
+              <div class="value-bar"><div class="fill" style="width: ${pct}%"></div></div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function quadrantLabel(q) {
+  return {
+    'I': 'Strong Yes direction',
+    'IIa': 'Lean Yes — high strengths but few opportunities',
+    'IIb': 'Lean No — high weaknesses outweigh strengths',
+    'III': 'Strong No direction',
+    'IVa': 'Lean Yes — opportunities outweigh threats',
+    'IVb': 'Lean No — threats outweigh opportunities',
+  }[q] || q;
+}
+function ncvLevel(ncv) {
+  if (ncv > 0.66) return 'high consensus';
+  if (ncv > 0.33) return 'medium consensus';
+  return 'low consensus';
+}
+
+function render2DPlot(X, Y, subQuadrant) {
+  // X is normalized [-1, 1] (O-T axis, horizontal), Y is normalized [-1, 1] (S-W axis, vertical)
+  // Plot: 720x720 viewBox, range -360..+360, mapping 1.0 -> 330
+  const px = X * 330;
+  const py = -Y * 330; // SVG y is inverted
+  return `
+    <div class="plot-svg-wrap">
+      <svg viewBox="-360 -360 720 720" width="640" height="640" style="max-width:100%;height:auto" id="plot-svg">
+        <rect x="0" y="-330" width="330" height="330" fill="var(--success-bg)" opacity="0.35"/>
+        <rect x="-330" y="-330" width="330" height="330" fill="var(--warning-bg)" opacity="0.25"/>
+        <rect x="-330" y="0" width="330" height="330" fill="var(--danger-bg)" opacity="0.35"/>
+        <rect x="0" y="0" width="330" height="330" fill="var(--warning-bg)" opacity="0.25"/>
+        <rect x="-110" y="-110" width="220" height="220" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="4 4" rx="4"/>
+        <rect x="-220" y="-220" width="440" height="440" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="4 4" rx="4"/>
+        <rect x="-330" y="-330" width="660" height="660" fill="none" stroke="var(--border-strong)" stroke-width="2"/>
+        <line x1="-330" y1="330" x2="330" y2="-330" stroke="var(--text-tertiary)" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/>
+        <line x1="-330" y1="0" x2="330" y2="0" stroke="var(--text-secondary)" stroke-width="2"/>
+        <line x1="0" y1="-330" x2="0" y2="330" stroke="var(--text-secondary)" stroke-width="2"/>
+        <text x="-104" y="-90" font-size="11" font-family="JetBrains Mono" fill="var(--text-tertiary)" font-weight="600">LOW 0.33</text>
+        <text x="-216" y="-200" font-size="11" font-family="JetBrains Mono" fill="var(--text-tertiary)" font-weight="600">MED 0.66</text>
+        <text x="-326" y="-310" font-size="11" font-family="JetBrains Mono" fill="var(--text-tertiary)" font-weight="600">HIGH 1.00</text>
+        <text x="320" y="-10" font-size="14" font-family="Plus Jakarta Sans" fill="var(--opportunity)" font-weight="700" text-anchor="end">+ Opportunities</text>
+        <text x="-320" y="-10" font-size="14" font-family="Plus Jakarta Sans" fill="var(--threat)" font-weight="700">+ Threats</text>
+        <text x="0" y="-340" font-size="14" font-family="Plus Jakarta Sans" fill="var(--strength)" font-weight="700" text-anchor="middle">+ Strengths</text>
+        <text x="0" y="354" font-size="14" font-family="Plus Jakarta Sans" fill="var(--weakness)" font-weight="700" text-anchor="middle">+ Weaknesses</text>
+        <text x="320" y="-320" font-size="11" font-family="Plus Jakarta Sans" fill="var(--success)" font-weight="700" text-anchor="end" letter-spacing="1.5">QUADRANT I</text>
+        <text x="-320" y="-320" font-size="11" font-family="Plus Jakarta Sans" fill="var(--warning)" font-weight="700" letter-spacing="1.5">QUADRANT II</text>
+        <text x="-320" y="320" font-size="11" font-family="Plus Jakarta Sans" fill="var(--danger)" font-weight="700" letter-spacing="1.5">QUADRANT III</text>
+        <text x="320" y="320" font-size="11" font-family="Plus Jakarta Sans" fill="var(--warning)" font-weight="700" text-anchor="end" letter-spacing="1.5">QUADRANT IV</text>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--brand)"/>
+          </marker>
+        </defs>
+        <line x1="0" y1="0" x2="${px}" y2="${py}" stroke="var(--brand)" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)"/>
+        <circle cx="0" cy="0" r="6" fill="var(--brand)" stroke="var(--bg-elevated)" stroke-width="3"/>
+        <circle cx="${px}" cy="${py}" r="9" fill="var(--brand)" stroke="var(--bg-elevated)" stroke-width="3"/>
+        <text x="${px + 12}" y="${py - 10}" font-size="13" font-family="JetBrains Mono" fill="var(--brand)" font-weight="700">(${X.toFixed(2)}, ${Y.toFixed(2)})</text>
+      </svg>
+    </div>
+  `;
+}
+
+function render2DPlotMulti(calcs) {
+  const colors = ['#3358FF', '#B45309', '#047857', '#BE123C', '#0369A1', '#7C3AED', '#DB2777', '#0891B2', '#65A30D', '#EA580C'];
+  return `
+    <div class="plot-svg-wrap">
+      <svg viewBox="-360 -360 720 720" width="640" height="640" style="max-width:100%;height:auto" id="plot-svg-multi">
+        <rect x="0" y="-330" width="330" height="330" fill="var(--success-bg)" opacity="0.35"/>
+        <rect x="-330" y="-330" width="330" height="330" fill="var(--warning-bg)" opacity="0.25"/>
+        <rect x="-330" y="0" width="330" height="330" fill="var(--danger-bg)" opacity="0.35"/>
+        <rect x="0" y="0" width="330" height="330" fill="var(--warning-bg)" opacity="0.25"/>
+        <rect x="-110" y="-110" width="220" height="220" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="4 4" rx="4"/>
+        <rect x="-220" y="-220" width="440" height="440" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="4 4" rx="4"/>
+        <rect x="-330" y="-330" width="660" height="660" fill="none" stroke="var(--border-strong)" stroke-width="2"/>
+        <line x1="-330" y1="330" x2="330" y2="-330" stroke="var(--text-tertiary)" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/>
+        <line x1="-330" y1="0" x2="330" y2="0" stroke="var(--text-secondary)" stroke-width="2"/>
+        <line x1="0" y1="-330" x2="0" y2="330" stroke="var(--text-secondary)" stroke-width="2"/>
+        <text x="320" y="-10" font-size="14" font-family="Plus Jakarta Sans" fill="var(--opportunity)" font-weight="700" text-anchor="end">+ Opportunities</text>
+        <text x="-320" y="-10" font-size="14" font-family="Plus Jakarta Sans" fill="var(--threat)" font-weight="700">+ Threats</text>
+        <text x="0" y="-340" font-size="14" font-family="Plus Jakarta Sans" fill="var(--strength)" font-weight="700" text-anchor="middle">+ Strengths</text>
+        <text x="0" y="354" font-size="14" font-family="Plus Jakarta Sans" fill="var(--weakness)" font-weight="700" text-anchor="middle">+ Weaknesses</text>
+        ${calcs.map((c, i) => {
+          const px = c.calc.X * 330;
+          const py = -c.calc.Y * 330;
+          const color = colors[i % colors.length];
+          return `
+            <line x1="0" y1="0" x2="${px}" y2="${py}" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+            <circle cx="${px}" cy="${py}" r="8" fill="${color}" stroke="var(--bg-elevated)" stroke-width="2.5"/>
+            <text x="${px + 12}" y="${py - 6}" font-size="12" font-family="Plus Jakarta Sans" fill="${color}" font-weight="700">${esc(c.option.name)}</text>
+          `;
+        }).join('')}
+        <circle cx="0" cy="0" r="5" fill="var(--text-primary)"/>
+      </svg>
+    </div>
+  `;
+}
+
+function attachResultsHandlers() {
+  attachOptionTabHandlers();
+  const pdf = document.getElementById('btn-pdf');
+  if (pdf) pdf.addEventListener('click', generatePDF);
+  const back = document.getElementById('btn-back-to-score');
+  if (back) back.addEventListener('click', () => {
+    if (confirm('Go back to scoring? Members will be able to edit scores.')) advancePhase('score');
+  });
+}
+
+// ============================================================================
+// PDF GENERATION — one-page summary
+// ============================================================================
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 14;
+  const isComp = state.session.mode === 'comparative';
+
+  const calcs = isComp
+    ? state.session.options.map(o => ({ option: o, calc: calculateForOption(o.id) }))
+    : [{ option: { id: 'main', name: state.session.title }, calc: calculateForOption('main') }];
+  const sorted = [...calcs].sort((a, b) => b.calc.recommendation - a.calc.recommendation);
+  const top = sorted[0];
+
+  // Header
+  doc.setFillColor(51, 88, 255);
+  doc.rect(0, 0, pageW, 18, 'F');
+  doc.setTextColor(255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.text('SO-WhaT Analysis Report', margin, 11);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text(new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }), pageW - margin, 11, { align: 'right' });
+
+  // Title block
+  doc.setTextColor(11, 20, 48);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  let y = 30;
+  doc.text(state.session.title, margin, y);
+  y += 7;
+  if (state.session.question) {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(77, 90, 120);
+    const lines = doc.splitTextToSize(state.session.question, pageW - 2 * margin);
+    doc.text(lines, margin, y);
+    y += lines.length * 5;
+  }
+  y += 2;
+
+  // Meta line
+  doc.setFontSize(9);
+  doc.setTextColor(129, 144, 173);
+  doc.text(
+    `${state.members.length} members · ${isComp ? state.session.options.length + ' options' : 'binary go/no-go'} · session ${state.session.code}`,
+    margin, y
+  );
+  y += 8;
+
+  // Recommendation block
+  const v = VERDICT_INFO[top.calc.verdict];
+  const recFillColor = top.calc.verdict.startsWith('yes') ? [4, 120, 87] : top.calc.verdict.startsWith('no') ? [190, 18, 60] : [129, 144, 173];
+  doc.setFillColor(...recFillColor);
+  doc.roundedRect(margin, y, pageW - 2 * margin, 22, 3, 3, 'F');
+  doc.setTextColor(255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.text(isComp ? 'TOP-RANKED OPTION' : 'TEAM RECOMMENDATION', margin + 5, y + 6);
+  doc.setFontSize(15);
+  doc.text(isComp ? `${top.option.name} — ${v.headline}` : v.headline, margin + 5, y + 13);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  const sign = top.calc.recommendation >= 0 ? '+' : '';
+  doc.text(`Score: ${sign}${top.calc.recommendation.toFixed(3)}   ·   Quadrant ${top.calc.subQuadrant}   ·   NCV ${top.calc.NCV.toFixed(3)}`, margin + 5, y + 19);
+  y += 28;
+
+  // Plot + metrics side by side
+  const plotSize = 75;
+  const plotX = margin;
+  const plotY = y;
+
+  // Render plot to canvas
+  const plotCanvas = await renderPlotCanvas(isComp ? calcs : [top], 360);
+  doc.addImage(plotCanvas, 'PNG', plotX, plotY, plotSize, plotSize);
+
+  // Metrics on right
+  const metricsX = plotX + plotSize + 8;
+  const metricsW = pageW - metricsX - margin;
+  let my = y;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(11, 20, 48);
+  doc.text('Category averages (0–3 Likert)', metricsX, my); my += 5;
+
+  const cats = [
+    { k: 'S', name: 'Strengths', color: [4, 120, 87] },
+    { k: 'W', name: 'Weaknesses', color: [180, 83, 9] },
+    { k: 'O', name: 'Opportunities', color: [3, 105, 161] },
+    { k: 'T', name: 'Threats', color: [190, 18, 60] },
+  ];
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  for (const c of cats) {
+    doc.setFillColor(...c.color);
+    doc.rect(metricsX, my - 2.5, 2, 4, 'F');
+    doc.setTextColor(11, 20, 48);
+    doc.text(c.name, metricsX + 4, my);
+    doc.setFont('helvetica', 'bold');
+    doc.text(top.calc[c.k].toFixed(2), metricsX + metricsW - 8, my, { align: 'right' });
+    doc.setFont('helvetica', 'normal');
+    // bar
+    const barY = my + 1;
+    doc.setFillColor(238, 241, 247);
+    doc.roundedRect(metricsX + 4, barY, metricsW - 12, 1.5, 0.5, 0.5, 'F');
+    doc.setFillColor(...c.color);
+    doc.roundedRect(metricsX + 4, barY, (metricsW - 12) * (top.calc[c.k] / 3), 1.5, 0.5, 0.5, 'F');
+    my += 7;
+  }
+
+  my += 3;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('Math', metricsX, my); my += 5;
+  doc.setFont('courier', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(77, 90, 120);
+  doc.text(`SOWT = ((S+O)-(W+T))/6 = ${top.calc.sowt >= 0 ? '+' : ''}${top.calc.sowt.toFixed(3)}`, metricsX, my); my += 4;
+  doc.text(`X = O-T = ${top.calc.Xraw >= 0 ? '+' : ''}${top.calc.Xraw.toFixed(2)}`, metricsX, my); my += 4;
+  doc.text(`Y = S-W = ${top.calc.Yraw >= 0 ? '+' : ''}${top.calc.Yraw.toFixed(2)}`, metricsX, my); my += 4;
+  doc.text(`NCV = ${top.calc.NCV.toFixed(3)}`, metricsX, my); my += 4;
+  doc.text(`Recommendation = 0.75*vector + 0.25*SOWT`, metricsX, my); my += 4;
+  doc.text(`             = ${sign}${top.calc.recommendation.toFixed(3)}`, metricsX, my);
+
+  y = Math.max(y + plotSize, my) + 8;
+
+  // For comparative mode, list options
+  if (isComp) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(11, 20, 48);
+    doc.text('Ranked options', margin, y); y += 5;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    sorted.forEach((c, i) => {
+      const sn = c.calc.recommendation >= 0 ? '+' : '';
+      doc.setTextColor(51, 88, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`#${i + 1}`, margin, y);
+      doc.setTextColor(11, 20, 48);
+      doc.text(c.option.name, margin + 8, y);
+      doc.setFont('courier', 'normal');
+      doc.setTextColor(77, 90, 120);
+      doc.text(`${sn}${c.calc.recommendation.toFixed(3)}`, margin + 70, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`${VERDICT_INFO[c.calc.verdict].label} · Q${c.calc.subQuadrant} · NCV ${c.calc.NCV.toFixed(2)}`, margin + 90, y);
+      y += 5;
+    });
+    y += 4;
+  }
+
+  // Team members
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(11, 20, 48);
+  doc.text('Team', margin, y); y += 5;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(77, 90, 120);
+  const memberNames = state.members.map(m => m.name + (m.user_id === state.session.lead_id ? ' (lead)' : '')).join(', ');
+  const memLines = doc.splitTextToSize(memberNames, pageW - 2 * margin);
+  doc.text(memLines, margin, y);
+  y += memLines.length * 4 + 4;
+
+  // Footer
+  doc.setDrawColor(225, 229, 238);
+  doc.line(margin, pageH - 14, pageW - margin, pageH - 14);
+  doc.setFontSize(8);
+  doc.setTextColor(129, 144, 173);
+  doc.text('Generated by SO-WhaT Analysis · Method: Solanki, Kennedy & Shirke (ASEE 2022)', margin, pageH - 8);
+  doc.text(`Session ${state.session.code}`, pageW - margin, pageH - 8, { align: 'right' });
+
+  const fname = `SOWhaT_${state.session.title.replace(/[^A-Za-z0-9]/g, '_').slice(0, 40)}_${state.session.code}.pdf`;
+  doc.save(fname);
+  toast('PDF downloaded', 'success');
+}
+
+// Render the 2D plot to a canvas for PDF embedding
+async function renderPlotCanvas(calcs, sizePx) {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = sizePx; canvas.height = sizePx;
+    const ctx = canvas.getContext('2d');
+    // Background white
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, sizePx, sizePx);
+    const cx = sizePx / 2, cy = sizePx / 2;
+    const scale = (sizePx / 2 - 20);
+
+    // Quadrant tints
+    ctx.fillStyle = 'rgba(209, 250, 229, 0.5)'; // success bg
+    ctx.fillRect(cx, 20, sizePx - cx - 20, cy - 20);
+    ctx.fillStyle = 'rgba(254, 243, 199, 0.4)'; // warning bg
+    ctx.fillRect(20, 20, cx - 20, cy - 20);
+    ctx.fillStyle = 'rgba(255, 228, 230, 0.5)'; // danger bg
+    ctx.fillRect(20, cy, cx - 20, sizePx - cy - 20);
+    ctx.fillStyle = 'rgba(254, 243, 199, 0.4)'; // warning bg
+    ctx.fillRect(cx, cy, sizePx - cx - 20, sizePx - cy - 20);
+
+    // Outer frame
+    ctx.strokeStyle = '#C9CFDD';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(20, 20, sizePx - 40, sizePx - 40);
+    // 0.66 ring
+    ctx.strokeRect(cx - 0.66 * scale, cy - 0.66 * scale, 1.32 * scale, 1.32 * scale);
+    ctx.setLineDash([3, 3]);
+    // 0.33 ring
+    ctx.strokeRect(cx - 0.33 * scale, cy - 0.33 * scale, 0.66 * scale, 0.66 * scale);
+    ctx.setLineDash([]);
+
+    // Diagonal divider y = -x
+    ctx.strokeStyle = 'rgba(129, 144, 173, 0.5)';
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(20, sizePx - 20);
+    ctx.lineTo(sizePx - 20, 20);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Axes
+    ctx.strokeStyle = '#4D5A78';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(sizePx - 20, cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, 20); ctx.lineTo(cx, sizePx - 20); ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = '#0369A1'; ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'right'; ctx.fillText('+ O', sizePx - 24, cy - 4);
+    ctx.fillStyle = '#BE123C'; ctx.textAlign = 'left'; ctx.fillText('+ T', 24, cy - 4);
+    ctx.fillStyle = '#047857'; ctx.textAlign = 'center'; ctx.fillText('+ S', cx, 14);
+    ctx.fillStyle = '#B45309'; ctx.fillText('+ W', cx, sizePx - 6);
+
+    // Vectors
+    const colors = ['#3358FF', '#B45309', '#047857', '#BE123C', '#0369A1', '#7C3AED', '#DB2777', '#0891B2', '#65A30D', '#EA580C'];
+    calcs.forEach((c, i) => {
+      const px = cx + c.calc.X * scale;
+      const py = cy - c.calc.Y * scale; // y flipped
+      const color = calcs.length === 1 ? '#3358FF' : colors[i % colors.length];
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+      // arrowhead
+      const angle = Math.atan2(py - cy, px - cx);
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px - 10 * Math.cos(angle - 0.4), py - 10 * Math.sin(angle - 0.4));
+      ctx.lineTo(px - 10 * Math.cos(angle + 0.4), py - 10 * Math.sin(angle + 0.4));
+      ctx.closePath();
+      ctx.fill();
+      // endpoint
+      ctx.beginPath(); ctx.arc(px, py, 4, 0, 2 * Math.PI); ctx.fill();
+      // label for multi
+      if (calcs.length > 1) {
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(c.option.name, px + 6, py - 4);
+      }
+    });
+    // origin
+    ctx.fillStyle = '#0B1430';
+    ctx.beginPath(); ctx.arc(cx, cy, 3, 0, 2 * Math.PI); ctx.fill();
+
+    resolve(canvas.toDataURL('image/png'));
+  });
+}
+
+// ============================================================================
+// BOOT
+// ============================================================================
+async function boot() {
+  // theme
+  document.documentElement.dataset.theme = loadTheme();
+
+  // user
+  state.user = loadUser();
+  if (!state.user) {
+    state.user = { id: genId(), name: '' };
+    saveUser(state.user);
+  }
+
+  // Check for invite link in URL hash (e.g. #join=ABC123)
+  const urlJoinCode = getJoinCodeFromUrl();
+  state.pendingJoinCode = urlJoinCode;
+  if (urlJoinCode && window.history && window.history.replaceState) {
+    // Clean the URL so a refresh doesn't re-trigger join logic
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+
+  // Config: PRECONFIGURED takes priority, then localStorage, then config screen
+  if (isPreconfigured()) {
+    state.config = { url: https://jofuhorotcybnvdwcwkn.supabase.co, anonKey: sb_publishable_1m_G76YHwL9WrfeVuoImbw_bk39jhZ1
+ };
+  } else {
+    state.config = loadConfig();
+    if (!state.config) {
+      state.view = 'config';
+      render();
+      return;
+    }
+  }
+
+  // try to connect
+  const ok = await initSupabase();
+  if (!ok) {
+    if (isPreconfigured()) {
+      // Stuck — the file ships with bad credentials. Show a message but don't
+      // dump the user into a config screen they can't fix from the UI.
+      toast('Could not connect with the credentials baked into this file. Check the PRECONFIGURED block in the HTML.', 'error', 10000);
+      state.view = 'setup';
+    } else {
+      state.view = 'config';
+    }
+    render();
+    return;
+  }
+
+  // Resume an active session — but if the URL invite is for a *different*
+  // session, drop the old one so the user can join the new one.
+  const cur = getCurrent();
+  if (urlJoinCode && cur && cur.code !== urlJoinCode) {
+    setCurrent(null);
+  } else if (cur && cur.code) {
+    try {
+      const { data: session } = await state.supabase
+        .from('sessions').select('*').eq('code', cur.code).maybeSingle();
+      if (session) {
+        await loadSessionData(session.id);
+        // if member is no longer in member list, re-add (in case they cleared LS but not session)
+        if (!getMyMember() && state.user.name) {
+          await state.supabase.from('members').upsert({
+            session_id: session.id, user_id: state.user.id, name: state.user.name,
+            last_seen: new Date().toISOString(),
+          }, { onConflict: 'session_id,user_id' });
+          await loadSessionData(session.id);
+        }
+        if (getMyMember()) {
+          subscribeRealtime(session.id);
+          startHeartbeat();
+          syncViewToPhase();
+          state.pendingJoinCode = null;  // already in a session
+          render();
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('resume failed', e);
+    }
+    setCurrent(null);
+  }
+
+  state.view = 'setup';
+  render();
+}
+
+// auto-rerender every 30s to update "joined X min ago" and online status
+setInterval(() => {
+  if (state.session) render();
+}, 30000);
+
+document.addEventListener('DOMContentLoaded', boot);
+
+// ============================================================================
+</script>
+
+</body>
+</html>
